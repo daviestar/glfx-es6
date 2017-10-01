@@ -1,5 +1,7 @@
 import {warpShader} from '../common'
 import {simpleShader} from '../../util'
+import store from '../../store'
+const {gl} = store
 
 /**
  * @filter        Swirl
@@ -11,32 +13,32 @@ import {simpleShader} from '../../util'
  *                the circular region will be rotated by.
  */
 export default function(centerX, centerY, radius, angle) {
-    gl.swirl = gl.swirl || warpShader('\
-        uniform float radius;\
-        uniform float angle;\
-        uniform vec2 center;\
-    ', '\
-        coord -= center;\
-        float distance = length(coord);\
-        if (distance < radius) {\
-            float percent = (radius - distance) / radius;\
-            float theta = percent * percent * angle;\
-            float s = sin(theta);\
-            float c = cos(theta);\
-            coord = vec2(\
-                coord.x * c - coord.y * s,\
-                coord.x * s + coord.y * c\
-            );\
-        }\
-        coord += center;\
-    ');
+  gl.swirl = gl.swirl || warpShader('\
+    uniform float radius;\
+    uniform float angle;\
+    uniform vec2 center;\
+  ', '\
+    coord -= center;\
+    float distance = length(coord);\
+    if (distance < radius) {\
+      float percent = (radius - distance) / radius;\
+      float theta = percent * percent * angle;\
+      float s = sin(theta);\
+      float c = cos(theta);\
+      coord = vec2(\
+        coord.x * c - coord.y * s,\
+        coord.x * s + coord.y * c\
+      );\
+    }\
+    coord += center;\
+  ');
 
-    simpleShader.call(this, gl.swirl, {
-        radius: radius,
-        center: [centerX, centerY],
-        angle: angle,
-        texSize: [this.width, this.height]
-    });
+  simpleShader.call(this, gl.swirl, {
+    radius: radius,
+    center: [centerX, centerY],
+    angle: angle,
+    texSize: [this.width, this.height]
+  });
 
-    return this;
+  return this;
 }

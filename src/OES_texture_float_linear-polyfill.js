@@ -1,3 +1,6 @@
+import store from './store'
+const {gl} = store
+
 // From: https://github.com/evanw/OES_texture_float_linear-polyfill
 (function() {
   // Uploads a 2x2 floating-point texture where one pixel is 2 and the other

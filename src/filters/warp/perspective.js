@@ -11,8 +11,8 @@ import {getSquareToQuad, multiply, getInverse} from '../../matrix'
  *               like the other argument.
  */
 export default function(before, after) {
-    var a = getSquareToQuad.apply(null, after);
-    var b = getSquareToQuad.apply(null, before);
-    var c = multiply(getInverse(a), b);
-    return this.matrixWarp(c);
+  var a = getSquareToQuad.apply(null, after);
+  var b = getSquareToQuad.apply(null, before);
+  var c = multiply(getInverse(a), b);
+  return this.matrixWarp(c);
 }

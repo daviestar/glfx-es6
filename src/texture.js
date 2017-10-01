@@ -1,3 +1,5 @@
+import store from './store'
+const {gl} = store
 
 var canvas = null;
 

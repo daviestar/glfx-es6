@@ -1,17 +1,20 @@
+import store from './store'
+const {gl} = store
+
 var defaultVertexSource = '\
 attribute vec2 vertex;\
 attribute vec2 _texCoord;\
 varying vec2 texCoord;\
 void main() {\
-    texCoord = _texCoord;\
-    gl_Position = vec4(vertex * 2.0 - 1.0, 0.0, 1.0);\
+  texCoord = _texCoord;\
+  gl_Position = vec4(vertex * 2.0 - 1.0, 0.0, 1.0);\
 }';
 
 var defaultFragmentSource = '\
 uniform sampler2D texture;\
 varying vec2 texCoord;\
 void main() {\
-    gl_FragColor = texture2D(texture, texCoord);\
+  gl_FragColor = texture2D(texture, texCoord);\
 }';
 
     

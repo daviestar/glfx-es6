@@ -1,5 +1,7 @@
 import Shader from '../../shader'
 import {simpleShader} from '../../util'
+import store from '../../store'
+const {gl} = store
 
 /**
  * @filter         Denoise
@@ -10,37 +12,37 @@ import {simpleShader} from '../../util'
  *                 give the original image, but ideal values are usually around 10-20.
  */
 export default function(exponent) {
-    // Do a 9x9 bilateral box filter
-    gl.denoise = gl.denoise || new Shader(null, '\
-        uniform sampler2D texture;\
-        uniform float exponent;\
-        uniform float strength;\
-        uniform vec2 texSize;\
-        varying vec2 texCoord;\
-        void main() {\
-            vec4 center = texture2D(texture, texCoord);\
-            vec4 color = vec4(0.0);\
-            float total = 0.0;\
-            for (float x = -4.0; x <= 4.0; x += 1.0) {\
-                for (float y = -4.0; y <= 4.0; y += 1.0) {\
-                    vec4 sample = texture2D(texture, texCoord + vec2(x, y) / texSize);\
-                    float weight = 1.0 - abs(dot(sample.rgb - center.rgb, vec3(0.25)));\
-                    weight = pow(weight, exponent);\
-                    color += sample * weight;\
-                    total += weight;\
-                }\
-            }\
-            gl_FragColor = color / total;\
+  // Do a 9x9 bilateral box filter
+  gl.denoise = gl.denoise || new Shader(null, '\
+    uniform sampler2D texture;\
+    uniform float exponent;\
+    uniform float strength;\
+    uniform vec2 texSize;\
+    varying vec2 texCoord;\
+    void main() {\
+      vec4 center = texture2D(texture, texCoord);\
+      vec4 color = vec4(0.0);\
+      float total = 0.0;\
+      for (float x = -4.0; x <= 4.0; x += 1.0) {\
+        for (float y = -4.0; y <= 4.0; y += 1.0) {\
+          vec4 sample = texture2D(texture, texCoord + vec2(x, y) / texSize);\
+          float weight = 1.0 - abs(dot(sample.rgb - center.rgb, vec3(0.25)));\
+          weight = pow(weight, exponent);\
+          color += sample * weight;\
+          total += weight;\
         }\
-    ');
+      }\
+      gl_FragColor = color / total;\
+    }\
+  ');
 
-    // Perform two iterations for stronger results
-    for (var i = 0; i < 2; i++) {
-        simpleShader.call(this, gl.denoise, {
-            exponent: Math.max(0, exponent),
-            texSize: [this.width, this.height]
-        });
-    }
+  // Perform two iterations for stronger results
+  for (var i = 0; i < 2; i++) {
+    simpleShader.call(this, gl.denoise, {
+      exponent: Math.max(0, exponent),
+      texSize: [this.width, this.height]
+    });
+  }
 
-    return this;
+  return this;
 }

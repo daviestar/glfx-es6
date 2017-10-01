@@ -1,5 +1,7 @@
 import Shader from '../../shader'
 import {simpleShader, clamp} from '../../util'
+import store from '../../store'
+const {gl} = store
 
 /**
  * @filter           Brightness / Contrast
@@ -8,27 +10,27 @@ import {simpleShader, clamp} from '../../util'
  * @param contrast   -1 to 1 (-1 is solid gray, 0 is no change, and 1 is maximum contrast)
  */
 export default function(brightness, contrast) {
-    gl.brightnessContrast = gl.brightnessContrast || new Shader(null, '\
-        uniform sampler2D texture;\
-        uniform float brightness;\
-        uniform float contrast;\
-        varying vec2 texCoord;\
-        void main() {\
-            vec4 color = texture2D(texture, texCoord);\
-            color.rgb += brightness;\
-            if (contrast > 0.0) {\
-                color.rgb = (color.rgb - 0.5) / (1.0 - contrast) + 0.5;\
-            } else {\
-                color.rgb = (color.rgb - 0.5) * (1.0 + contrast) + 0.5;\
-            }\
-            gl_FragColor = color;\
-        }\
-    ');
+  gl.brightnessContrast = gl.brightnessContrast || new Shader(null, '\
+    uniform sampler2D texture;\
+    uniform float brightness;\
+    uniform float contrast;\
+    varying vec2 texCoord;\
+    void main() {\
+      vec4 color = texture2D(texture, texCoord);\
+      color.rgb += brightness;\
+      if (contrast > 0.0) {\
+        color.rgb = (color.rgb - 0.5) / (1.0 - contrast) + 0.5;\
+      } else {\
+        color.rgb = (color.rgb - 0.5) * (1.0 + contrast) + 0.5;\
+      }\
+      gl_FragColor = color;\
+    }\
+  ');
 
-    simpleShader.call(this, gl.brightnessContrast, {
-        brightness: clamp(-1, brightness, 1),
-        contrast: clamp(-1, contrast, 1)
-    });
+  simpleShader.call(this, gl.brightnessContrast, {
+    brightness: clamp(-1, brightness, 1),
+    contrast: clamp(-1, contrast, 1)
+  });
 
-    return this;
+  return this;
 }
