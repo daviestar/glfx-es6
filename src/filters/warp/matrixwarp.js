@@ -1,8 +1,7 @@
 import {warpShader} from '../common'
 import {getInverse} from '../../matrix'
 import {simpleShader} from '../../util'
-import store from '../../store'
-const {gl} = store
+import * as store from '../../store'
 
 /**
  * @filter                Matrix Warp
@@ -20,6 +19,7 @@ const {gl} = store
  *                        to use for simple operations like flipping and rotating.
  */
 export default function(matrix, inverse, useTextureSpace) {
+  var gl = store.get('gl');
   gl.matrixWarp = gl.matrixWarp || warpShader('\
     uniform mat3 matrix;\
     uniform bool useTextureSpace;\

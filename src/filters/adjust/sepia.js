@@ -1,7 +1,6 @@
 import Shader from '../../shader'
 import {simpleShader, clamp} from '../../util'
-import store from '../../store'
-const {gl} = store
+import * as store from '../../store'
 
 /**
  * @filter         Sepia
@@ -9,6 +8,7 @@ const {gl} = store
  * @param amount   0 to 1 (0 for no effect, 1 for full sepia coloring)
  */
 export default function(amount) {
+  var gl = store.get('gl')
   gl.sepia = gl.sepia || new Shader(null, '\
     uniform sampler2D texture;\
     uniform float amount;\

@@ -1,7 +1,6 @@
 import Shader from '../../shader'
 import {simpleShader, clamp} from '../../util'
-import store from '../../store'
-const {gl} = store
+import * as store from '../../store'
 
 /**
  * @filter         Noise
@@ -9,6 +8,7 @@ const {gl} = store
  * @param amount   0 to 1 (0 for no effect, 1 for maximum noise)
  */
 export default function(amount) {
+  var gl = store.get('gl')
   gl.noise = gl.noise || new Shader(null, '\
     uniform sampler2D texture;\
     uniform float amount;\

@@ -1,7 +1,6 @@
 import Shader from '../../shader'
 import {simpleShader, clamp} from '../../util'
-import store from '../../store'
-const {gl} = store
+import * as store from '../../store'
 
 /**
  * @filter           Hue / Saturation
@@ -16,6 +15,7 @@ const {gl} = store
  * @param saturation -1 to 1 (-1 is solid gray, 0 is no change, and 1 is maximum contrast)
  */
 export default function(hue, saturation) {
+  var gl = store.get('gl')
   gl.hueSaturation = gl.hueSaturation || new Shader(null, '\
     uniform sampler2D texture;\
     uniform float hue;\

@@ -1,8 +1,7 @@
 import Shader from '../../shader'
 import {simpleShader, clamp} from '../../util'
 import {randomShaderFunc} from '../common'
-import store from '../../store'
-const {gl} = store
+import * as store from '../../store'
 
 /**
  * @filter           Lens Blur
@@ -21,6 +20,7 @@ const {gl} = store
  * @param angle      the rotation of the bokeh in radians
  */
 export default function(radius, brightness, angle) {
+  var gl = store.get('gl')
   // All averaging is done on values raised to a power to make more obvious bokeh
   // (we will raise the average to the inverse power at the end to compensate).
   // Without this the image looks almost like a normal blurred image. This hack is

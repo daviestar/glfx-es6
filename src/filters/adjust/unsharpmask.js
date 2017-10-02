@@ -1,7 +1,6 @@
 import Shader from '../../shader'
 import {simpleShader} from '../../util'
-import store from '../../store'
-const {gl} = store
+import * as store from '../../store'
 
 /**
  * @filter         Unsharp Mask
@@ -11,6 +10,7 @@ const {gl} = store
  * @param strength A scale factor where 0 is no effect and higher values cause a stronger effect.
  */
 export default function(radius, strength) {
+  var gl = store.get('gl')
   gl.unsharpMask = gl.unsharpMask || new Shader(null, '\
     uniform sampler2D blurredTexture;\
     uniform sampler2D originalTexture;\

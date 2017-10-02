@@ -1,7 +1,6 @@
 import Shader from '../../shader'
 import {simpleShader} from '../../util'
-import store from '../../store'
-const {gl} = store
+import * as store from '../../store'
 
 /**
  * @filter         Denoise
@@ -12,6 +11,7 @@ const {gl} = store
  *                 give the original image, but ideal values are usually around 10-20.
  */
 export default function(exponent) {
+  var gl = store.get('gl')
   // Do a 9x9 bilateral box filter
   gl.denoise = gl.denoise || new Shader(null, '\
     uniform sampler2D texture;\

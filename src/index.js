@@ -1,16 +1,20 @@
-import store from './store'
+import * as store from './store'
+import Texture from './texture'
+import Shader from './shader'
+import * as filters from './filters'
+import {splineInterpolate} from './util'
 
 function wrapTexture(texture) {
   return {
     _: texture,
     loadContentsOf: function(element) {
       // Make sure that we're using the correct global WebGL context
-      store.gl = this._.gl;
+      store.set({gl: this._.gl});
       this._.loadContentsOf(element);
     },
     destroy: function() {
       // Make sure that we're using the correct global WebGL context
-      store.gl = this._.gl;
+      store.set({gl: this._.gl});
       this._.destroy();
     }
   };
@@ -21,17 +25,19 @@ function texture(element) {
 }
 
 function initialize(width, height) {
-  var type = store.gl.UNSIGNED_BYTE;
+  console.log('init')
+  var gl = store.get('gl')
+  var type = gl.UNSIGNED_BYTE;
 
   // Go for floating point buffer textures if we can, it'll make the bokeh
   // filter look a lot better. Note that on Windows, ANGLE does not let you
   // render to a floating-point texture when linear filtering is enabled.
   // See http://crbug.com/172278 for more information.
-  if (store.gl.getExtension('OES_texture_float') && store.gl.getExtension('OES_texture_float_linear')) {
-    var testTexture = new Texture(100, 100, store.gl.RGBA, store.gl.FLOAT);
+  if (gl.getExtension('OES_texture_float') && gl.getExtension('OES_texture_float_linear')) {
+    var testTexture = new Texture(100, 100, gl.RGBA, gl.FLOAT);
     try {
       // Only use gl.FLOAT if we can render to it
-      testTexture.drawTo(function() { type = store.gl.FLOAT; });
+      testTexture.drawTo(function() { type = gl.FLOAT; });
     } catch (e) {}
     testTexture.destroy();
   }
@@ -40,9 +46,9 @@ function initialize(width, height) {
   if (this._.spareTexture) this._.spareTexture.destroy();
   this.width = width;
   this.height = height;
-  this._.texture = new Texture(width, height, store.gl.RGBA, type);
-  this._.spareTexture = new Texture(width, height, store.gl.RGBA, type);
-  this._.extraTexture = this._.extraTexture || new Texture(0, 0, store.gl.RGBA, type);
+  this._.texture = new Texture(width, height, gl.RGBA, type);
+  this._.spareTexture = new Texture(width, height, gl.RGBA, type);
+  this._.extraTexture = this._.extraTexture || new Texture(0, 0, gl.RGBA, type);
   this._.flippedShader = this._.flippedShader || new Shader(null, '\
     uniform sampler2D texture;\
     varying vec2 texCoord;\
@@ -84,6 +90,7 @@ function replace(node) {
 }
 
 function contents() {
+  var gl = store.get('gl')
   var texture = new Texture(this._.texture.width, this._.texture.height, gl.RGBA, gl.UNSIGNED_BYTE);
   this._.texture.use();
   texture.drawTo(function() {
@@ -97,11 +104,12 @@ function contents() {
    Length of the array will be width * height * 4.
 */
 function getPixelArray() {
+  var gl = store.get('gl')
   var w = this._.texture.width;
   var h = this._.texture.height;
   var array = new Uint8Array(w * h * 4);
   this._.texture.drawTo(function() {
-    store.gl.readPixels(0, 0, w, h, store.gl.RGBA, store.gl.UNSIGNED_BYTE, array);
+    gl.readPixels(0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, array);
   });
   return array;
 }
@@ -109,7 +117,7 @@ function getPixelArray() {
 function wrap(func) {
   return function() {
     // Make sure that we're using the correct global WebGL context
-    store.gl = this._.gl;
+    store.set({gl: this._.gl});
 
     // Now that the context has been switched, we can call the wrapped function
     return func.apply(this, arguments);
@@ -120,15 +128,16 @@ const exports = {}
 exports.canvas = function() {
   var canvas = document.createElement('canvas');
   try {
-    store.gl = canvas.getContext('experimental-webgl', { premultipliedAlpha: false });
+    store.set({gl: canvas.getContext('experimental-webgl', { premultipliedAlpha: false })});
   } catch (e) {
-    store.gl = null;
+    store.set({gl: null});
   }
+  var gl = store.get('gl')
   if (!gl) {
     throw 'This browser does not support WebGL';
   }
   canvas._ = {
-      gl: store.gl,
+      gl: gl,
       isInitialized: false,
       texture: null,
       spareTexture: null,
@@ -142,30 +151,30 @@ exports.canvas = function() {
   canvas.replace = wrap(replace);
   canvas.contents = wrap(contents);
   canvas.getPixelArray = wrap(getPixelArray);
-
-  // Filter methods
-  canvas.brightnessContrast = wrap(brightnessContrast);
-  canvas.hexagonalPixelate = wrap(hexagonalPixelate);
-  canvas.hueSaturation = wrap(hueSaturation);
-  canvas.colorHalftone = wrap(colorHalftone);
-  canvas.triangleBlur = wrap(triangleBlur);
-  canvas.unsharpMask = wrap(unsharpMask);
-  canvas.perspective = wrap(perspective);
-  canvas.matrixWarp = wrap(matrixWarp);
-  canvas.bulgePinch = wrap(bulgePinch);
-  canvas.tiltShift = wrap(tiltShift);
-  canvas.dotScreen = wrap(dotScreen);
-  canvas.edgeWork = wrap(edgeWork);
-  canvas.lensBlur = wrap(lensBlur);
-  canvas.zoomBlur = wrap(zoomBlur);
-  canvas.noise = wrap(noise);
-  canvas.denoise = wrap(denoise);
-  canvas.curves = wrap(curves);
-  canvas.swirl = wrap(swirl);
-  canvas.ink = wrap(ink);
-  canvas.vignette = wrap(vignette);
-  canvas.vibrance = wrap(vibrance);
-  canvas.sepia = wrap(sepia);
+  
+  // // Filter methods
+  canvas.brightnessContrast = wrap(filters.brightnessContrast);
+  canvas.hexagonalPixelate = wrap(filters.hexagonalPixelate);
+  canvas.hueSaturation = wrap(filters.hueSaturation);
+  canvas.colorHalftone = wrap(filters.colorHalftone);
+  canvas.triangleBlur = wrap(filters.triangleBlur);
+  canvas.unsharpMask = wrap(filters.unsharpMask);
+  canvas.perspective = wrap(filters.perspective);
+  canvas.matrixWarp = wrap(filters.matrixWarp);
+  canvas.bulgePinch = wrap(filters.bulgePinch);
+  canvas.tiltShift = wrap(filters.tiltShift);
+  canvas.dotScreen = wrap(filters.dotScreen);
+  canvas.edgeWork = wrap(filters.edgeWork);
+  canvas.lensBlur = wrap(filters.lensBlur);
+  canvas.zoomBlur = wrap(filters.zoomBlur);
+  canvas.noise = wrap(filters.noise);
+  canvas.denoise = wrap(filters.denoise);
+  canvas.curves = wrap(filters.curves);
+  canvas.swirl = wrap(filters.swirl);
+  canvas.ink = wrap(filters.ink);
+  canvas.vignette = wrap(filters.vignette);
+  canvas.vibrance = wrap(filters.vibrance);
+  canvas.sepia = wrap(filters.sepia);
 
   return canvas;
 };

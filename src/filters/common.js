@@ -1,3 +1,5 @@
+import Shader from '../shader'
+
 export function warpShader(uniforms, warp) {
   return new Shader(null, uniforms + '\
     uniform sampler2D texture;\

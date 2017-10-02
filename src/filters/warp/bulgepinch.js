@@ -1,7 +1,6 @@
 import {warpShader} from '../common'
 import {simpleShader, clamp} from '../../util'
-import store from '../../store'
-const {gl} = store
+import * as store from '../../store'
 
 /**
  * @filter         Bulge / Pinch
@@ -12,6 +11,7 @@ const {gl} = store
  * @param strength -1 to 1 (-1 is strong pinch, 0 is no effect, 1 is strong bulge)
  */
 export default function(centerX, centerY, radius, strength) {
+  var gl = store.get('gl')
   gl.bulgePinch = gl.bulgePinch || warpShader('\
     uniform float radius;\
     uniform float strength;\

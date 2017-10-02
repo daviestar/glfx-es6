@@ -1,7 +1,6 @@
 import Shader from '../../shader'
 import {simpleShader, clamp} from '../../util'
-import store from '../../store'
-const {gl} = store
+import * as store from '../../store'
 
 /**
  * @filter         Vignette
@@ -10,6 +9,7 @@ const {gl} = store
  * @param amount   0 to 1 (0 for no effect, 1 for maximum lens darkening)
  */
 export default function(size, amount) {
+  var gl = store.get('gl')
   gl.vignette = gl.vignette || new Shader(null, '\
     uniform sampler2D texture;\
     uniform float size;\

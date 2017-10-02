@@ -1,5 +1,4 @@
-import store from './store'
-const {gl} = store
+import * as store from './store'
 
 var defaultVertexSource = '\
 attribute vec2 vertex;\
@@ -21,11 +20,13 @@ void main() {\
 export default class Shader {
 
   static getDefaultShader() {
+    var gl = store.get('gl')
     gl.defaultShader = gl.defaultShader || new Shader();
     return gl.defaultShader;
   }
   
   constructor(vertexSource, fragmentSource) {
+    var gl = store.get('gl')
     this.vertexAttribute = null;
     this.texCoordAttribute = null;
     this.program = gl.createProgram();
@@ -41,11 +42,13 @@ export default class Shader {
   }
   
   destroy() {
+    var gl = store.get('gl')
     gl.deleteProgram(this.program);
     this.program = null;
   }
   
   uniforms(uniforms) {
+    var gl = store.get('gl')
     gl.useProgram(this.program);
     for (var name in uniforms) {
       if (!uniforms.hasOwnProperty(name)) continue;
@@ -75,6 +78,7 @@ export default class Shader {
   // textures are uniforms too but for some reason can't be specified by gl.uniform1f,
   // even though floating point numbers represent the integers 0 through 7 exactly
   textures(textures) {
+    var gl = store.get('gl')
     gl.useProgram(this.program);
     for (var name in textures) {
       if (!textures.hasOwnProperty(name)) continue;
@@ -85,6 +89,7 @@ export default class Shader {
   }
   
   drawRect(left, top, right, bottom) {
+    var gl = store.get('gl')
     var viewport = gl.getParameter(gl.VIEWPORT);
     top = top !== undefined ? (top - viewport[1]) / viewport[3] : 0;
     left = left !== undefined ? (left - viewport[0]) / viewport[2] : 0;
@@ -127,6 +132,7 @@ function isNumber(obj) {
 }
 
 function compileSource(type, source) {
+  var gl = store.get('gl')
   var shader = gl.createShader(type);
   gl.shaderSource(shader, source);
   gl.compileShader(shader);

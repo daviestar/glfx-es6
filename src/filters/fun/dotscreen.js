@@ -1,7 +1,6 @@
 import Shader from '../../shader'
 import {simpleShader} from '../../util'
-import store from '../../store'
-const {gl} = store
+import * as store from '../../store'
 
 /**
  * @filter        Dot Screen
@@ -13,6 +12,7 @@ const {gl} = store
  * @param size    The diameter of a dot in pixels.
  */
 export default function(centerX, centerY, angle, size) {
+  var gl = store.get('gl')
   gl.dotScreen = gl.dotScreen || new Shader(null, '\
     uniform sampler2D texture;\
     uniform vec2 center;\

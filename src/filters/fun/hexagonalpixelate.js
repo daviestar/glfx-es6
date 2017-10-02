@@ -1,7 +1,6 @@
 import Shader from '../../shader'
 import {simpleShader} from '../../util'
-import store from '../../store'
-const {gl} = store
+import * as store from '../../store'
 
 /**
  * @filter        Hexagonal Pixelate
@@ -12,6 +11,7 @@ const {gl} = store
  * @param scale   The width of an individual tile, in pixels.
  */
 export default function(centerX, centerY, scale) {
+  var gl = store.get('gl')
   gl.hexagonalPixelate = gl.hexagonalPixelate || new Shader(null, '\
     uniform sampler2D texture;\
     uniform vec2 center;\

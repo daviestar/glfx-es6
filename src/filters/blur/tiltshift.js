@@ -1,8 +1,7 @@
 import Shader from '../../shader'
 import {simpleShader} from '../../util'
 import {randomShaderFunc} from '../common'
-import store from '../../store'
-const {gl} = store
+import * as store from '../../store'
 
 /**
  * @filter               Tilt Shift
@@ -22,6 +21,7 @@ const {gl} = store
  * @param gradientRadius The distance from the line at which the maximum blur radius is reached.
  */
 export default function(startX, startY, endX, endY, blurRadius, gradientRadius) {
+  var gl = store.get('gl')
   gl.tiltShift = gl.tiltShift || new Shader(null, '\
     uniform sampler2D texture;\
     uniform float blurRadius;\

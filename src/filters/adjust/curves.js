@@ -1,7 +1,6 @@
 import Shader from '../../shader'
 import {simpleShader, clamp, splineInterpolate} from '../../util'
-import store from '../../store'
-const {gl} = store
+import * as store from '../../store'
 
 /**
  * @filter      Curves
@@ -23,6 +22,7 @@ const {gl} = store
  *              channel (just like for red).
  */
 export default function(red, green, blue) {
+  var gl = store.get('gl')
   // Create the ramp texture
   red = splineInterpolate(red);
   if (arguments.length == 1) {

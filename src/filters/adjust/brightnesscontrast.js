@@ -1,7 +1,6 @@
 import Shader from '../../shader'
 import {simpleShader, clamp} from '../../util'
-import store from '../../store'
-const {gl} = store
+import * as store from '../../store'
 
 /**
  * @filter           Brightness / Contrast
@@ -10,6 +9,7 @@ const {gl} = store
  * @param contrast   -1 to 1 (-1 is solid gray, 0 is no change, and 1 is maximum contrast)
  */
 export default function(brightness, contrast) {
+  var gl = store.get('gl')
   gl.brightnessContrast = gl.brightnessContrast || new Shader(null, '\
     uniform sampler2D texture;\
     uniform float brightness;\

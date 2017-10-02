@@ -1,7 +1,6 @@
 import Shader from '../../shader'
 import {simpleShader} from '../../util'
-import store from '../../store'
-const {gl} = store
+import * as store from '../../store'
 
 /**
  * @filter         Ink
@@ -14,6 +13,7 @@ const {gl} = store
  *                 instead of black ones.
  */
 export default function(strength) {
+  var gl = store.get('gl');
   gl.ink = gl.ink || new Shader(null, '\
     uniform sampler2D texture;\
     uniform float strength;\

@@ -1,7 +1,6 @@
 import Shader from '../../shader'
 import {simpleShader, clamp} from '../../util'
-import store from '../../store'
-const {gl} = store
+import * as store from '../../store'
 
 /**
  * @filter       Vibrance
@@ -9,6 +8,7 @@ const {gl} = store
  * @param amount -1 to 1 (-1 is minimum vibrance, 0 is no change, and 1 is maximum vibrance)
  */
 export default function(amount) {
+  var gl = store.get('gl')
   gl.vibrance = gl.vibrance || new Shader(null, '\
     uniform sampler2D texture;\
     uniform float amount;\

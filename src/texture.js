@@ -1,17 +1,19 @@
-import store from './store'
-const {gl} = store
+import * as store from './store'
+import Shader from './shader'
 
 var canvas = null;
 
 export default class Texture {
   
   static fromElement(element) {
+    var gl = store.get('gl')
     var texture = new Texture(0, 0, gl.RGBA, gl.UNSIGNED_BYTE);
     texture.loadContentsOf(element);
     return texture;
   }
   
   constructor(width, height, format, type) {
+    var gl = store.get('gl')
     this.gl = gl;
     this.id = gl.createTexture();
     this.width = width;
@@ -28,6 +30,7 @@ export default class Texture {
   }
   
   loadContentsOf(element) {
+    var gl = store.get('gl')
     this.width = element.width || element.videoWidth;
     this.height = element.height || element.videoHeight;
     gl.bindTexture(gl.TEXTURE_2D, this.id);
@@ -35,6 +38,7 @@ export default class Texture {
   }
   
   initFromBytes(width, height, data) {
+    var gl = store.get('gl')
     this.width = width;
     this.height = height;
     this.format = gl.RGBA;
@@ -44,16 +48,19 @@ export default class Texture {
   }
   
   destroy() {
+    var gl = store.get('gl')
     gl.deleteTexture(this.id);
     this.id = null;
   }
   
   use(unit) {
+    var gl = store.get('gl')
     gl.activeTexture(gl.TEXTURE0 + (unit || 0));
     gl.bindTexture(gl.TEXTURE_2D, this.id);
   }
   
   unuse(unit) {
+    var gl = store.get('gl')
     gl.activeTexture(gl.TEXTURE0 + (unit || 0));
     gl.bindTexture(gl.TEXTURE_2D, null);
   }
@@ -70,6 +77,7 @@ export default class Texture {
 
     // change the format only if required
     if (width != this.width || height != this.height || format != this.format || type != this.type) {
+      var gl = store.get('gl')
       this.width = width;
       this.height = height;
       this.format = format;
@@ -80,6 +88,7 @@ export default class Texture {
   }
   
   drawTo(callback) {
+    var gl = store.get('gl')
     // start rendering to this texture
     gl.framebuffer = gl.framebuffer || gl.createFramebuffer();
     gl.bindFramebuffer(gl.FRAMEBUFFER, gl.framebuffer);
@@ -98,6 +107,7 @@ export default class Texture {
   
   fillUsingCanvas(callback) {
     callback(getCanvas(this));
+    var gl = store.get('gl')
     this.format = gl.RGBA;
     this.type = gl.UNSIGNED_BYTE;
     gl.bindTexture(gl.TEXTURE_2D, this.id);
@@ -108,6 +118,7 @@ export default class Texture {
   toImage(image) {
     this.use();
     Shader.getDefaultShader().drawRect();
+    var gl = store.get('gl')
     var size = this.width * this.height * 4;
     var pixels = new Uint8Array(size);
     var c = getCanvas(this);

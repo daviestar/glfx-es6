@@ -1,8 +1,7 @@
 import Shader from '../../shader'
 import {simpleShader} from '../../util'
 import {randomShaderFunc} from '../common'
-import store from '../../store'
-const {gl} = store
+import * as store from '../../store'
 
 /**
  * @filter       Triangle Blur
@@ -12,6 +11,7 @@ const {gl} = store
  * @param radius The radius of the pyramid convolved with the image.
  */
 export default function(radius) {
+  var gl = store.get('gl')
   gl.triangleBlur = gl.triangleBlur || new Shader(null, '\
     uniform sampler2D texture;\
     uniform vec2 delta;\

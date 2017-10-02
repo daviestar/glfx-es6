@@ -1,7 +1,6 @@
 import {warpShader} from '../common'
 import {simpleShader} from '../../util'
-import store from '../../store'
-const {gl} = store
+import * as store from '../../store'
 
 /**
  * @filter        Swirl
@@ -13,6 +12,7 @@ const {gl} = store
  *                the circular region will be rotated by.
  */
 export default function(centerX, centerY, radius, angle) {
+  var gl = store.get('gl');
   gl.swirl = gl.swirl || warpShader('\
     uniform float radius;\
     uniform float angle;\

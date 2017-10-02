@@ -1,8 +1,7 @@
 import Shader from '../../shader'
 import {simpleShader} from '../../util'
 import {randomShaderFunc} from '../common'
-import store from '../../store'
-const {gl} = store
+import * as store from '../../store'
 
 /**
  * @filter         Zoom Blur
@@ -13,6 +12,7 @@ const {gl} = store
  *                 where 0 doesn't change the image and 1 creates a highly blurred image.
  */
 export default function(centerX, centerY, strength) {
+  var gl = store.get('gl')
   gl.zoomBlur = gl.zoomBlur || new Shader(null, '\
     uniform sampler2D texture;\
     uniform vec2 center;\
