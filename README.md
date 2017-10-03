@@ -81,6 +81,7 @@ canvas.draw(texture);
 
 This replaces the internal contents of the canvas with the image stored in `texture`. All filter operations take place in a chain that starts with `canvas.draw()` and ends with `canvas.update()`.
 
+| Name | Description |
 | --- | --- |
 | `texture` | Stores image data, the result of calling `fx.texture()`. |
 
