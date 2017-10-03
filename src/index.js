@@ -2,7 +2,7 @@ import * as store from './store'
 import Texture from './texture'
 import Shader from './shader'
 import * as filters from './filters'
-import {splineInterpolate} from './util'
+export {splineInterpolate} from './util'
 
 function wrapTexture(texture) {
   return {
@@ -25,7 +25,6 @@ function texture(element) {
 }
 
 function initialize(width, height) {
-  console.log('init')
   var gl = store.get('gl')
   var type = gl.UNSIGNED_BYTE;
 
@@ -124,8 +123,7 @@ function wrap(func) {
   };
 }
 
-const exports = {}
-exports.canvas = function() {
+export const canvas = function() {
   var canvas = document.createElement('canvas');
   try {
     store.set({gl: canvas.getContext('experimental-webgl', { premultipliedAlpha: false })});
@@ -178,5 +176,3 @@ exports.canvas = function() {
 
   return canvas;
 };
-exports.splineInterpolate = splineInterpolate;
-export default exports

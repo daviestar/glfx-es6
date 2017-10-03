@@ -138,7 +138,6 @@ export default class Texture {
     temp = other.height; other.height = this.height; this.height = temp;
     temp = other.format; other.format = this.format; this.format = temp;
   }
-  
 }
 
 function getCanvas(texture) {
