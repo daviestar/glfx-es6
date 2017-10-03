@@ -14,7 +14,7 @@ This library provides realtime image effects using WebGL. There are three parts 
 
 There are two caveats to glfx.js. First, WebGL is a new technology that is only available in the latest browsers and it will be quite a while before the majority of users have it. Second, due to the same origin policy, JavaScript is only allowed to read images that originate from the same domain as the script reading them, so you may have to host the images you modify.
 
-### Quick Start
+# Quick Start
 
 This HTML fragment is all you need to use the API. Copy and paste it into an empty index.html document, make sure that directory also contains `glfx.js` and an image named <a href="../media/image.jpg">image.jpg</a>, and open index.html. You should see the image with the ink filter applied.
 
@@ -64,9 +64,9 @@ window.onload = function() {
 <script src="glfx.js"></script>
 ```
 
-### Core API
+# Core API
 
-#### Canvas Constructor
+## Canvas Constructor
 
 ```js
 var canvas = fx.canvas()
@@ -74,7 +74,7 @@ var canvas = fx.canvas()
 
 Before you can apply any filters you will need a canvas, which stores the result of the filters you apply. Canvas creation is done through `fx.canvas()`, which creates and returns a new WebGL `<canvas>` tag with additional methods specific to glfx.js. This call will throw an error message if the browser doesn't support WebGL.
 
-#### Draw Image
+## Draw Image
 
 ```js
 canvas.draw(texture);
@@ -86,7 +86,7 @@ This replaces the internal contents of the canvas with the image stored in `text
 | :--- | :--- |
 | `texture` | Stores image data, the result of calling `fx.texture()`. |
 
-#### Update Screen
+## Update Screen
 
 ```js
 canvas.update();
@@ -94,7 +94,7 @@ canvas.update();
 
 This replaces the visible contents of the canvas with the internal image result. For efficiency reasons, the internal image buffers are not rendered to the screen every time a filter is applied, so you will need to call `update()` on your canvas after you have finished applying the filters to be able to see the result. All filter operations take place in a chain that starts with `canvas.draw()` and ends with `canvas.update()`.
 
-#### Texture Constructor
+## Texture Constructor
 
 ```js
 var texture = canvas.texture(element);
@@ -106,7 +106,7 @@ Creates a texture that initially stores the image from an HTML element. Notice t
 | :--- | :--- |
 | `element` | The HTML element to store in the texture, either an `<img>`, a `<canvas>`, or a `<video>`. |
 
-#### Update Texture
+## Update Texture
 
 ```js
 texture.loadContentsOf(element);
@@ -118,7 +118,7 @@ Loads the image from an HTML element into the texture. This is more efficient th
 | :--- | :--- |
 | `element` | The HTML element to store in the texture, either an `<img>`, a `<canvas>`, or a `<video>`. |
 
-#### Destroy Texture
+## Destroy Texture
 
 ```js
 texture.destroy();
@@ -127,11 +127,11 @@ texture.destroy();
 Textures will be garbage collected eventually when they are no longer referenced, but this method will free GPU resources immediately.
 
 
-### Filters
+# Filters
 
 All filters are methods on a canvas object and modify the image that is currently on the canvas. This means you will have to `draw()` a texture on the canvas before you can apply a filter to it. For efficiency reasons, the internal image buffers are not rendered to the screen every time a filter is applied, so you will need to call `update()` on your canvas after you have finished applying the filters to be able to see the result. For an example, please see the [Quick Start](#quick-start) section above.
 
-#### Brightness / Contrast ([demo](/demo/#brightnessContrast))
+## Brightness / Contrast ([demo](http://evanw.github.io/glfx.js/demo/#brightnessContrast))
 
 ```js
 canvas.brightnessContrast(brightness, contrast);
@@ -144,7 +144,7 @@ Provides additive brightness and multiplicative contrast control.
 | `brightness` | -1 to 1 (-1 is solid black, 0 is no change, and 1 is solid white) |
 | `contrast` | -1 to 1 (-1 is solid gray, 0 is no change, and 1 is maximum contrast) |
   
-#### Curves
+## Curves
 
 ```js
 canvas.curves(red, green, blue);
@@ -158,7 +158,7 @@ A powerful mapping tool that transforms the colors in the image by an arbitrary 
 | `green` | (optional) A list of points that define the function for the green channel (just like for red). |
 | `blue` | (optional) A list of points that define the function for the blue channel (just like for red). |
 
-#### Denoise ([demo](/demo/#denoise))
+## Denoise ([demo](http://evanw.github.io/glfx.js/demo/#denoise))
 
 ```js
 canvas.denoise(exponent);
@@ -170,7 +170,7 @@ Smooths over grainy noise in dark images using an 9x9 box filter weighted by col
 | :--- | :--- |
 | `exponent` | The exponent of the color intensity difference, should be greater than zero. A value of zero just gives an 9x9 box blur and high values give the original image, but ideal values are usually around 10-20. |
 
-#### Hue / Saturation ([demo](/demo/#hueSaturation))
+## Hue / Saturation ([demo](http://evanw.github.io/glfx.js/demo/#hueSaturation))
 
 ```js
 canvas.hueSaturation(hue, saturation);
@@ -183,7 +183,7 @@ Provides rotational hue and multiplicative saturation control. RGB color space c
 | `hue` | -1 to 1 (-1 is 180 degree rotation in the negative direction, 0 is no change, and 1 is 180 degree rotation in the positive direction) |
 | `saturation` | -1 to 1 (-1 is solid gray, 0 is no change, and 1 is maximum contrast) |
 
-#### Noise ([demo](/demo/#noise))
+## Noise ([demo](http://evanw.github.io/glfx.js/demo/#noise))
 
 ```js
 canvas.noise(amount);
@@ -195,7 +195,7 @@ Adds black and white noise to the image.
 | :--- | :--- |
 | `amount` | 0 to 1 (0 for no effect, 1 for maximum noise) |
 
-#### Sepia ([demo](/demo/#sepia))
+## Sepia ([demo](http://evanw.github.io/glfx.js/demo/#sepia))
 
 ```js
 canvas.sepia(amount);
@@ -207,7 +207,7 @@ Gives the image a reddish-brown monochrome tint that imitates an old photograph.
 | :--- | :--- |
 | `amount` | 0 to 1 (0 for no effect, 1 for full sepia coloring) |
 
-#### Unsharp Mask ([demo](/demo/#unsharpMask))
+## Unsharp Mask ([demo](http://evanw.github.io/glfx.js/demo/#unsharpMask))
 
 ```js
 canvas.unsharpMask(radius, strength);
@@ -220,7 +220,7 @@ A form of image sharpening that amplifies high-frequencies in the image. It is i
 | `radius` | The blur radius that calculates the average of the neighboring pixels. |
 | `strength` | A scale factor where 0 is no effect and higher values cause a stronger effect. |
 
-#### Vibrance ([demo](/demo/#vibrance))
+## Vibrance ([demo](http://evanw.github.io/glfx.js/demo/#vibrance))
 
 ```js
 canvas.vibrance(amount);
@@ -232,7 +232,7 @@ Modifies the saturation of desaturated colors, leaving saturated colors unmodifi
 | :--- | :--- |
 | `amount` | -1 to 1 (-1 is minimum vibrance, 0 is no change, and 1 is maximum vibrance) |
 
-#### Vignette ([demo](/demo/#vignette))
+## Vignette ([demo](http://evanw.github.io/glfx.js/demo/#vignette))
 
 ```js
 canvas.vignette(size, amount);
@@ -245,7 +245,7 @@ Adds a simulated lens edge darkening effect.
 | `size` | 0 to 1 (0 for center of frame, 1 for edge of frame) |
 | `amount` | 0 to 1 (0 for no effect, 1 for maximum lens darkening) |
 
-#### Lens Blur ([demo](/demo/#lensBlur))
+## Lens Blur ([demo](http://evanw.github.io/glfx.js/demo/#lensBlur))
 
 ```js
 canvas.lensBlur(radius, brightness, angle);
@@ -259,7 +259,7 @@ Imitates a camera capturing the image out of focus by using a blur that generate
 | `brightness` | -1 to 1 (the brightness of the bokeh, negative values will create dark bokeh) |
 | `angle` | the rotation of the bokeh in radians |
 
-#### Tilt Shift ([demo](/demo/#tiltShift))
+## Tilt Shift ([demo](http://evanw.github.io/glfx.js/demo/#tiltShift))
 
 ```js
 canvas.tiltShift(startX, startY, endX, endY, blurRadius, gradientRadius);
@@ -276,7 +276,7 @@ Simulates the shallow depth of field normally encountered in close-up photograph
 | `blurRadius` | The maximum radius of the pyramid blur. |
 | `gradientRadius` | The distance from the line at which the maximum blur radius is reached. |
 
-#### Triangle Blur ([demo](/demo/#triangleBlur))
+## Triangle Blur ([demo](http://evanw.github.io/glfx.js/demo/#triangleBlur))
 
 ```js
 canvas.triangleBlur(radius);
@@ -288,7 +288,7 @@ This is the most basic blur filter, which convolves the image with a pyramid fil
 | :--- | :--- |
 | `radius` | The radius of the pyramid convolved with the image. |
 
-#### Zoom Blur ([demo](/demo/#zoomBlur))
+## Zoom Blur ([demo](http://evanw.github.io/glfx.js/demo/#zoomBlur))
 
 ```js
 canvas.zoomBlur(centerX, centerY, strength);
@@ -302,7 +302,7 @@ Blurs the image away from a certain point, which looks like radial motion blur.
 | `centerY` | The y coordinate of the blur origin. |
 | `strength` | The strength of the blur. Values in the range 0 to 1 are usually sufficient, where 0 doesn't change the image and 1 creates a highly blurred image. |
 
-#### Color Halftone ([demo](/demo/#colorHalftone))
+## Color Halftone ([demo](http://evanw.github.io/glfx.js/demo/#colorHalftone))
 
 ```js
 canvas.colorHalftone(centerX, centerY, angle, size);
@@ -317,7 +317,7 @@ Simulates a CMYK halftone rendering of the image by multiplying pixel values wit
 | `angle` | The rotation of the pattern in radians. |
 | `size` | The diameter of a dot in pixels. |
 
-#### Dot Screen ([demo](/demo/#dotScreen))
+## Dot Screen ([demo](http://evanw.github.io/glfx.js/demo/#dotScreen))
 
 ```js
 canvas.dotScreen(centerX, centerY, angle, size);
@@ -332,7 +332,7 @@ Simulates a black and white halftone rendering of the image by multiplying pixel
 | `angle` | The rotation of the pattern in radians. |
 | `size` | The diameter of a dot in pixels. |
 
-#### Edge Work ([demo](/demo/#edgeWork))
+## Edge Work ([demo](http://evanw.github.io/glfx.js/demo/#edgeWork))
 
 ```js
 canvas.edgeWork(radius);
@@ -344,7 +344,7 @@ Picks out different frequencies in the image by subtracting two copies of the im
 | :--- | :--- |
 | `radius` | The radius of the effect in pixels. |
 
-#### Hexagonal Pixelate ([demo](/demo/#hexagonalPixelate))
+## Hexagonal Pixelate ([demo](http://evanw.github.io/glfx.js/demo/#hexagonalPixelate))
 
 ```js
 canvas.hexagonalPixelate(centerX, centerY, scale);
@@ -358,7 +358,7 @@ Renders the image using a pattern of hexagonal tiles. Tile colors are nearest-ne
 | `centerY` | The y coordinate of the pattern center. |
 | `scale` | The width of an individual tile, in pixels. |
 
-#### Ink ([demo](/demo/#ink))
+## Ink ([demo](http://evanw.github.io/glfx.js/demo/#ink))
 
 ```js
 canvas.ink(strength);
@@ -370,7 +370,7 @@ Simulates outlining the image in ink by darkening edges stronger than a certain 
 | :--- | :--- |
 | `strength` | The multiplicative scale of the ink edges. Values in the range 0 to 1 are usually sufficient, where 0 doesn't change the image and 1 adds lots of black edges. Negative strength values will create white ink edges instead of black ones.
 
-#### Bulge / Pinch ([demo](/demo/#bulgePinch))
+## Bulge / Pinch ([demo](http://evanw.github.io/glfx.js/demo/#bulgePinch))
 
 ```js
 canvas.bulgePinch(centerX, centerY, radius, strength);
@@ -385,7 +385,7 @@ Bulges or pinches the image in a circle.
 | `radius` | The radius of the circle of effect. |
 | `strength` | -1 to 1 (-1 is strong pinch, 0 is no effect, 1 is strong bulge) |
 
-#### Matrix Warp
+## Matrix Warp
 
 ```js
 canvas.matrixWarp(matrix, inverse, useTextureSpace);
@@ -399,7 +399,7 @@ Transforms an image by a 2x2 or 3x3 matrix. The coordinates used in the transfor
 | `inverse` | A boolean value that, when true, applies the inverse transformation instead. (optional, defaults to false) |
 | `useTextureSpace` | A boolean value that, when true, uses texture-space coordinates instead of screen-space coordinates. Texture-space coordinates range from -1 to 1 instead of 0 to width - 1 or height - 1, and are easier to use for simple operations like flipping and rotating. |
 
-#### Perspective ([demo](/demo/#perspective))
+## Perspective ([demo](http://evanw.github.io/glfx.js/demo/#perspective))
 
 ```js
 canvas.perspective(before, after);
@@ -412,7 +412,7 @@ Warps one quadrangle to another with a perspective transform. This can be used t
 | `before` | The x and y coordinates of four points before the transform in a flat list. This would look like [ax, ay, bx, by, cx, cy, dx, dy] for four points (ax, ay), (bx, by), (cx, cy), and (dx, dy). |
 | `after` | The x and y coordinates of four points after the transform in a flat list, just like the other argument. |
 
-#### Swirl ([demo](/demo/#swirl))
+## Swirl ([demo](http://evanw.github.io/glfx.js/demo/#swirl))
 
 ```js
 canvas.swirl(centerX, centerY, radius, angle);
