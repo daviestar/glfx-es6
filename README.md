@@ -2,6 +2,7 @@
 
 ES6 port of [glfx.js](https://github.com/evanw/glfx.js)
 
+Original documentation below:
 
 # Overview
 
