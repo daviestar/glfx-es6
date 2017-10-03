@@ -81,12 +81,7 @@ canvas.draw(texture);
 
 This replaces the internal contents of the canvas with the image stored in `texture`. All filter operations take place in a chain that starts with `canvas.draw()` and ends with `canvas.update()`.
 
-<table class="docs">
-  <tr>
-    <td>`texture`</td>
-    <td>Stores image data, the result of calling `fx.texture()`.</td>
-  </tr>
-</table>
+| `texture` | Stores image data, the result of calling `fx.texture()`. |
 
 #### Update Screen
 
@@ -104,12 +99,7 @@ var texture = canvas.texture(element);
 
 Creates a texture that initially stores the image from an HTML element. Notice that `texture()` is a method on a canvas object, which means if you want to use the same image on two canvas objects you will need two different textures, one for each canvas.
 
-<table class="docs">
-  <tr>
-    <td>`element`</td>
-    <td>The HTML element to store in the texture, either an `<img>`, a `<canvas>`, or a `<video>`.</td>
-  </tr>
-</table>
+| `element` | The HTML element to store in the texture, either an `<img>`, a `<canvas>`, or a `<video>`. |
 
 #### Update Texture
 
@@ -119,12 +109,7 @@ texture.loadContentsOf(element);
 
 Loads the image from an HTML element into the texture. This is more efficient than repeatedly creating and destroying textures.
 
-<table class="docs">
-  <tr>
-    <td>`element`</td>
-    <td>The HTML element to store in the texture, either an `<img>`, a `<canvas>`, or a `<video>`.</td>
-  </tr>
-</table>
+| `element` | The HTML element to store in the texture, either an `<img>`, a `<canvas>`, or a `<video>`. |
 
 #### Destroy Texture
 
@@ -147,16 +132,8 @@ canvas.brightnessContrast(brightness, contrast);
 
 Provides additive brightness and multiplicative contrast control.
 
-<table class="docs">
-  <tr>
-    <td>`brightness`</td>
-    <td>-1 to 1 (-1 is solid black, 0 is no change, and 1 is solid white)</td>
-  </tr>
-  <tr>
-    <td>`contrast`</td>
-    <td>-1 to 1 (-1 is solid gray, 0 is no change, and 1 is maximum contrast)</td>
-  </tr>
-</table>
+| `brightness` | -1 to 1 (-1 is solid black, 0 is no change, and 1 is solid white) |
+| `contrast` | -1 to 1 (-1 is solid gray, 0 is no change, and 1 is maximum contrast) |
   
 #### Curves
 
@@ -166,20 +143,9 @@ canvas.curves(red, green, blue);
 
 A powerful mapping tool that transforms the colors in the image by an arbitrary function. The function is interpolated between a set of 2D points using splines. The curves filter can take either one or three arguments which will apply the mapping to either luminance or RGB values, respectively.
 
-<table class="docs">
-  <tr>
-    <td>`red`</td>
-    <td>A list of points that define the function for the red channel. Each point is a list of two values: the value before the mapping and the value after the mapping, both in the range 0 to 1\. For example, [[0,1], [1,0]] would invert the red channel while [[0,0], [1,1]] would leave the red channel unchanged. If green and blue are omitted then this argument also applies to the green and blue channels.</td>
-  </tr>
-  <tr>
-    <td>`green`</td>
-    <td>(optional) A list of points that define the function for the green channel (just like for red).</td>
-  </tr>
-  <tr>
-    <td>`blue`</td>
-    <td>(optional) A list of points that define the function for the blue channel (just like for red).</td>
-  </tr>
-</table>
+| `red` | A list of points that define the function for the red channel. Each point is a list of two values: the value before the mapping and the value after the mapping, both in the range 0 to 1. For example, `[[0,1], [1,0]]` would invert the red channel while `[[0,0], [1,1]]` would leave the red channel unchanged. If green and blue are omitted then this argument also applies to the green and blue channels. |
+| `green` | (optional) A list of points that define the function for the green channel (just like for red). |
+| `blue` | (optional) A list of points that define the function for the blue channel (just like for red). |
 
 #### Denoise ([demo](/demo/#denoise))
 
@@ -189,12 +155,7 @@ canvas.denoise(exponent);
 
 Smooths over grainy noise in dark images using an 9x9 box filter weighted by color intensity, similar to a bilateral filter.
 
-<table class="docs">
-  <tr>
-    <td>`exponent`</td>
-    <td>The exponent of the color intensity difference, should be greater than zero. A value of zero just gives an 9x9 box blur and high values give the original image, but ideal values are usually around 10-20.</td>
-  </tr>
-</table>
+| `exponent` | The exponent of the color intensity difference, should be greater than zero. A value of zero just gives an 9x9 box blur and high values give the original image, but ideal values are usually around 10-20. |
 
 #### Hue / Saturation ([demo](/demo/#hueSaturation))
 
@@ -204,16 +165,8 @@ canvas.hueSaturation(hue, saturation);
 
 Provides rotational hue and multiplicative saturation control. RGB color space can be imagined as a cube where the axes are the red, green, and blue color values. Hue changing works by rotating the color vector around the grayscale line, which is the straight line from black (0, 0, 0) to white (1, 1, 1). Saturation is implemented by scaling all color channel values either toward or away from the average color channel value.
 
-<table class="docs">
-  <tr>
-    <td>`hue`</td>
-    <td>-1 to 1 (-1 is 180 degree rotation in the negative direction, 0 is no change, and 1 is 180 degree rotation in the positive direction)</td>
-  </tr>
-  <tr>
-    <td>`saturation`</td>
-    <td>-1 to 1 (-1 is solid gray, 0 is no change, and 1 is maximum contrast)</td>
-  </tr>
-</table>
+| `hue` | -1 to 1 (-1 is 180 degree rotation in the negative direction, 0 is no change, and 1 is 180 degree rotation in the positive direction) |
+| `saturation` | -1 to 1 (-1 is solid gray, 0 is no change, and 1 is maximum contrast) |
 
 #### Noise ([demo](/demo/#noise))
 
@@ -223,12 +176,7 @@ canvas.noise(amount);
 
 Adds black and white noise to the image.
 
-<table class="docs">
-  <tr>
-    <td>`amount`</td>
-    <td>0 to 1 (0 for no effect, 1 for maximum noise)</td>
-  </tr>
-</table>
+| `amount` | 0 to 1 (0 for no effect, 1 for maximum noise) |
 
 #### Sepia ([demo](/demo/#sepia))
 
@@ -238,12 +186,7 @@ canvas.sepia(amount);
 
 Gives the image a reddish-brown monochrome tint that imitates an old photograph.
 
-<table class="docs">
-  <tr>
-    <td>`amount`</td>
-    <td>0 to 1 (0 for no effect, 1 for full sepia coloring)</td>
-  </tr>
-</table>
+| `amount` | 0 to 1 (0 for no effect, 1 for full sepia coloring) |
 
 #### Unsharp Mask ([demo](/demo/#unsharpMask))
 
@@ -253,16 +196,8 @@ canvas.unsharpMask(radius, strength);
 
 A form of image sharpening that amplifies high-frequencies in the image. It is implemented by scaling pixels away from the average of their neighbors.
 
-<table class="docs">
-  <tr>
-    <td>`radius`</td>
-    <td>The blur radius that calculates the average of the neighboring pixels.</td>
-  </tr>
-  <tr>
-    <td>`strength`</td>
-    <td>A scale factor where 0 is no effect and higher values cause a stronger effect.</td>
-  </tr>
-</table>
+| `radius` | The blur radius that calculates the average of the neighboring pixels. |
+| `strength` | A scale factor where 0 is no effect and higher values cause a stronger effect. |
 
 #### Vibrance ([demo](/demo/#vibrance))
 
@@ -272,12 +207,7 @@ canvas.vibrance(amount);
 
 Modifies the saturation of desaturated colors, leaving saturated colors unmodified.
 
-<table class="docs">
-  <tr>
-    <td>`amount`</td>
-    <td>-1 to 1 (-1 is minimum vibrance, 0 is no change, and 1 is maximum vibrance)</td>
-  </tr>
-</table>
+| `amount` | -1 to 1 (-1 is minimum vibrance, 0 is no change, and 1 is maximum vibrance) |
 
 #### Vignette ([demo](/demo/#vignette))
 
@@ -287,16 +217,8 @@ canvas.vignette(size, amount);
 
 Adds a simulated lens edge darkening effect.
 
-<table class="docs">
-  <tr>
-    <td>`size`</td>
-    <td>0 to 1 (0 for center of frame, 1 for edge of frame)</td>
-  </tr>
-  <tr>
-    <td>`amount`</td>
-    <td>0 to 1 (0 for no effect, 1 for maximum lens darkening)</td>
-  </tr>
-</table>
+| `size` | 0 to 1 (0 for center of frame, 1 for edge of frame) |
+| `amount` | 0 to 1 (0 for no effect, 1 for maximum lens darkening) |
 
 #### Lens Blur ([demo](/demo/#lensBlur))
 
@@ -306,20 +228,9 @@ canvas.lensBlur(radius, brightness, angle);
 
 Imitates a camera capturing the image out of focus by using a blur that generates the large shapes known as bokeh. The polygonal shape of real bokeh is due to the blades of the aperture diaphragm when it isn't fully open. This blur renders bokeh from a 6-bladed diaphragm because the computation is more efficient. It can be separated into three rhombi, each of which is just a skewed box blur. This filter makes use of the floating point texture WebGL extension to implement the brightness parameter, so there will be severe visual artifacts if brightness is non-zero and the floating point texture extension is not available. The idea was from John White's SIGGRAPH 2011 talk but this effect has an additional brightness parameter that fakes what would otherwise come from a HDR source.
 
-<table class="docs">
-  <tr>
-    <td>`radius`</td>
-    <td>the radius of the hexagonal disk convolved with the image</td>
-  </tr>
-  <tr>
-    <td>`brightness`</td>
-    <td>-1 to 1 (the brightness of the bokeh, negative values will create dark bokeh)</td>
-  </tr>
-  <tr>
-    <td>`angle`</td>
-    <td>the rotation of the bokeh in radians</td>
-  </tr>
-</table>
+| `radius` | the radius of the hexagonal disk convolved with the image |
+| `brightness` | -1 to 1 (the brightness of the bokeh, negative values will create dark bokeh) |
+| `angle` | the rotation of the bokeh in radians |
 
 #### Tilt Shift ([demo](/demo/#tiltShift))
 
@@ -329,32 +240,12 @@ canvas.tiltShift(startX, startY, endX, endY, blurRadius, gradientRadius);
 
 Simulates the shallow depth of field normally encountered in close-up photography, which makes the scene seem much smaller than it actually is. This filter assumes the scene is relatively planar, in which case the part of the scene that is completely in focus can be described by a line (the intersection of the focal plane and the scene). An example of a planar scene might be looking at a road from above at a downward angle. The image is then blurred with a blur radius that starts at zero on the line and increases further from the line.
 
-<table class="docs">
-  <tr>
-    <td>`startX`</td>
-    <td>The x coordinate of the start of the line segment.</td>
-  </tr>
-  <tr>
-    <td>`startY`</td>
-    <td>The y coordinate of the start of the line segment.</td>
-  </tr>
-  <tr>
-    <td>`endX`</td>
-    <td>The x coordinate of the end of the line segment.</td>
-  </tr>
-  <tr>
-    <td>`endY`</td>
-    <td>The y coordinate of the end of the line segment.</td>
-  </tr>
-  <tr>
-    <td>`blurRadius`</td>
-    <td>The maximum radius of the pyramid blur.</td>
-  </tr>
-  <tr>
-    <td>`gradientRadius`</td>
-    <td>The distance from the line at which the maximum blur radius is reached.</td>
-  </tr>
-</table>
+| `startX` | The x coordinate of the start of the line segment. |
+| `startY` | The y coordinate of the start of the line segment. |
+| `endX` | The x coordinate of the end of the line segment. |
+| `endY` | The y coordinate of the end of the line segment. |
+| `blurRadius` | The maximum radius of the pyramid blur. |
+| `gradientRadius` | The distance from the line at which the maximum blur radius is reached. |
 
 #### Triangle Blur ([demo](/demo/#triangleBlur))
 
@@ -364,12 +255,7 @@ canvas.triangleBlur(radius);
 
 This is the most basic blur filter, which convolves the image with a pyramid filter. The pyramid filter is separable and is applied as two perpendicular triangle filters.
 
-<table class="docs">
-  <tr>
-    <td>`radius`</td>
-    <td>The radius of the pyramid convolved with the image.</td>
-  </tr>
-</table>
+| `radius` | The radius of the pyramid convolved with the image. |
 
 #### Zoom Blur ([demo](/demo/#zoomBlur))
 
@@ -379,20 +265,9 @@ canvas.zoomBlur(centerX, centerY, strength);
 
 Blurs the image away from a certain point, which looks like radial motion blur.
 
-<table class="docs">
-  <tr>
-    <td>`centerX`</td>
-    <td>The x coordinate of the blur origin.</td>
-  </tr>
-  <tr>
-    <td>`centerY`</td>
-    <td>The y coordinate of the blur origin.</td>
-  </tr>
-  <tr>
-    <td>`strength`</td>
-    <td>The strength of the blur. Values in the range 0 to 1 are usually sufficient, where 0 doesn't change the image and 1 creates a highly blurred image.</td>
-  </tr>
-</table>
+| `centerX` | The x coordinate of the blur origin. |
+| `centerY` | The y coordinate of the blur origin. |
+| `strength` | The strength of the blur. Values in the range 0 to 1 are usually sufficient, where 0 doesn't change the image and 1 creates a highly blurred image. |
 
 #### Color Halftone ([demo](/demo/#colorHalftone))
 
@@ -402,24 +277,10 @@ canvas.colorHalftone(centerX, centerY, angle, size);
 
 Simulates a CMYK halftone rendering of the image by multiplying pixel values with a four rotated 2D sine wave patterns, one each for cyan, magenta, yellow, and black.
 
-<table class="docs">
-  <tr>
-    <td>`centerX`</td>
-    <td>The x coordinate of the pattern origin.</td>
-  </tr>
-  <tr>
-    <td>`centerY`</td>
-    <td>The y coordinate of the pattern origin.</td>
-  </tr>
-  <tr>
-    <td>`angle`</td>
-    <td>The rotation of the pattern in radians.</td>
-  </tr>
-  <tr>
-    <td>`size`</td>
-    <td>The diameter of a dot in pixels.</td>
-  </tr>
-</table>
+| `centerX` | The x coordinate of the pattern origin. |
+| `centerY` | The y coordinate of the pattern origin. |
+| `angle` | The rotation of the pattern in radians. |
+| `size` | The diameter of a dot in pixels. |
 
 #### Dot Screen ([demo](/demo/#dotScreen))
 
@@ -429,24 +290,10 @@ canvas.dotScreen(centerX, centerY, angle, size);
 
 Simulates a black and white halftone rendering of the image by multiplying pixel values with a rotated 2D sine wave pattern.
 
-<table class="docs">
-  <tr>
-    <td>`centerX`</td>
-    <td>The x coordinate of the pattern origin.</td>
-  </tr>
-  <tr>
-    <td>`centerY`</td>
-    <td>The y coordinate of the pattern origin.</td>
-  </tr>
-  <tr>
-    <td>`angle`</td>
-    <td>The rotation of the pattern in radians.</td>
-  </tr>
-  <tr>
-    <td>`size`</td>
-    <td>The diameter of a dot in pixels.</td>
-  </tr>
-</table>
+| `centerX` | The x coordinate of the pattern origin. |
+| `centerY` | The y coordinate of the pattern origin. |
+| `angle` | The rotation of the pattern in radians. |
+| `size` | The diameter of a dot in pixels. |
 
 #### Edge Work ([demo](/demo/#edgeWork))
 
@@ -456,12 +303,7 @@ canvas.edgeWork(radius);
 
 Picks out different frequencies in the image by subtracting two copies of the image blurred with different radii.
 
-<table class="docs">
-  <tr>
-    <td>`radius`</td>
-    <td>The radius of the effect in pixels.</td>
-  </tr>
-</table>
+| `radius` | The radius of the effect in pixels. |
 
 #### Hexagonal Pixelate ([demo](/demo/#hexagonalPixelate))
 
@@ -471,20 +313,9 @@ canvas.hexagonalPixelate(centerX, centerY, scale);
 
 Renders the image using a pattern of hexagonal tiles. Tile colors are nearest-neighbor sampled from the centers of the tiles.
 
-<table class="docs">
-  <tr>
-    <td>`centerX`</td>
-    <td>The x coordinate of the pattern center.</td>
-  </tr>
-  <tr>
-    <td>`centerY`</td>
-    <td>The y coordinate of the pattern center.</td>
-  </tr>
-  <tr>
-    <td>`scale`</td>
-    <td>The width of an individual tile, in pixels.</td>
-  </tr>
-</table>
+| `centerX` | The x coordinate of the pattern center. |
+| `centerY` | The y coordinate of the pattern center. |
+| `scale` | The width of an individual tile, in pixels. |
 
 #### Ink ([demo](/demo/#ink))
 
@@ -494,12 +325,7 @@ canvas.ink(strength);
 
 Simulates outlining the image in ink by darkening edges stronger than a certain threshold. The edge detection value is the difference of two copies of the image, each blurred using a blur of a different radius.
 
-<table class="docs">
-  <tr>
-    <td>`strength`</td>
-    <td>The multiplicative scale of the ink edges. Values in the range 0 to 1 are usually sufficient, where 0 doesn't change the image and 1 adds lots of black edges. Negative strength values will create white ink edges instead of black ones.</td>
-  </tr>
-</table>
+| `strength` | The multiplicative scale of the ink edges. Values in the range 0 to 1 are usually sufficient, where 0 doesn't change the image and 1 adds lots of black edges. Negative strength values will create white ink edges instead of black ones.
 
 #### Bulge / Pinch ([demo](/demo/#bulgePinch))
 
@@ -509,24 +335,10 @@ canvas.bulgePinch(centerX, centerY, radius, strength);
 
 Bulges or pinches the image in a circle.
 
-<table class="docs">
-  <tr>
-    <td>`centerX`</td>
-    <td>The x coordinate of the center of the circle of effect.</td>
-  </tr>
-  <tr>
-    <td>`centerY`</td>
-    <td>The y coordinate of the center of the circle of effect.</td>
-  </tr>
-  <tr>
-    <td>`radius`</td>
-    <td>The radius of the circle of effect.</td>
-  </tr>
-  <tr>
-    <td>`strength`</td>
-    <td>-1 to 1 (-1 is strong pinch, 0 is no effect, 1 is strong bulge)</td>
-  </tr>
-</table>
+| `centerX` | The x coordinate of the center of the circle of effect. |
+| `centerY` | The y coordinate of the center of the circle of effect. |
+| `radius` | The radius of the circle of effect. |
+| `strength` | -1 to 1 (-1 is strong pinch, 0 is no effect, 1 is strong bulge) |
 
 #### Matrix Warp
 
@@ -536,20 +348,9 @@ canvas.matrixWarp(matrix, inverse, useTextureSpace);
 
 Transforms an image by a 2x2 or 3x3 matrix. The coordinates used in the transformation are (x, y) for a 2x2 matrix or (x, y, 1) for a 3x3 matrix, where x and y are in units of pixels.
 
-<table class="docs">
-  <tr>
-    <td>`matrix`</td>
-    <td>A 2x2 or 3x3 matrix represented as either a list or a list of lists. For example, the 3x3 matrix [[2,0,0],[0,3,0],[0,0,1]] can also be represented as [2,0,0,0,3,0,0,0,1] or just [2,0,0,3].</td>
-  </tr>
-  <tr>
-    <td>`inverse`</td>
-    <td>A boolean value that, when true, applies the inverse transformation instead. (optional, defaults to false)</td>
-  </tr>
-  <tr>
-    <td>`useTextureSpace`</td>
-    <td>A boolean value that, when true, uses texture-space coordinates instead of screen-space coordinates. Texture-space coordinates range from -1 to 1 instead of 0 to width - 1 or height - 1, and are easier to use for simple operations like flipping and rotating.</td>
-  </tr>
-</table>
+| `matrix` | A 2x2 or 3x3 matrix represented as either a list or a list of lists. For example, the 3x3 matrix `[[2,0,0],[0,3,0],[0,0,1]]` can also be represented as `[2,0,0,0,3,0,0,0,1]` or just `[2,0,0,3]`. |
+| `inverse` | A boolean value that, when true, applies the inverse transformation instead. (optional, defaults to false) |
+| `useTextureSpace` | A boolean value that, when true, uses texture-space coordinates instead of screen-space coordinates. Texture-space coordinates range from -1 to 1 instead of 0 to width - 1 or height - 1, and are easier to use for simple operations like flipping and rotating. |
 
 #### Perspective ([demo](/demo/#perspective))
 
@@ -559,16 +360,8 @@ canvas.perspective(before, after);
 
 Warps one quadrangle to another with a perspective transform. This can be used to make a 2D image look 3D or to recover a 2D image captured in a 3D environment.
 
-<table class="docs">
-  <tr>
-    <td>`before`</td>
-    <td>The x and y coordinates of four points before the transform in a flat list. This would look like [ax, ay, bx, by, cx, cy, dx, dy] for four points (ax, ay), (bx, by), (cx, cy), and (dx, dy).</td>
-  </tr>
-  <tr>
-    <td>`after`</td>
-    <td>The x and y coordinates of four points after the transform in a flat list, just like the other argument.</td>
-  </tr>
-</table>
+| `before` | The x and y coordinates of four points before the transform in a flat list. This would look like [ax, ay, bx, by, cx, cy, dx, dy] for four points (ax, ay), (bx, by), (cx, cy), and (dx, dy). |
+| `after` | The x and y coordinates of four points after the transform in a flat list, just like the other argument. |
 
 #### Swirl ([demo](/demo/#swirl))
 
@@ -578,21 +371,7 @@ canvas.swirl(centerX, centerY, radius, angle);
 
 Warps a circular region of the image in a swirl.
 
-<table class="docs">
-  <tr>
-    <td>`centerX`</td>
-    <td>The x coordinate of the center of the circular region.</td>
-  </tr>
-  <tr>
-    <td>`centerY`</td>
-    <td>The y coordinate of the center of the circular region.</td>
-  </tr>
-  <tr>
-    <td>`radius`</td>
-    <td>The radius of the circular region.</td>
-  </tr>
-  <tr>
-    <td>`angle`</td>
-    <td>The angle in radians that the pixels in the center of the circular region will be rotated by.</td>
-  </tr>
-</table>
+| `centerX` | The x coordinate of the center of the circular region. |
+| `centerY` | The y coordinate of the center of the circular region. |
+| `radius` | The radius of the circular region. |
+| `angle` | The angle in radians that the pixels in the center of the circular region will be rotated by. |
