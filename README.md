@@ -15,8 +15,7 @@ There are two caveats to glfx.js. First, WebGL is a new technology that is only 
 
 ### Quick Start
 
-This HTML fragment is all you need to use the API. Copy and paste it into an empty index.html document, make sure that directory also contains <a href="../glfx.js">glfx.js</a> and an image named <a href="../media/image.jpg">image.jpg</a>, and open index.html. You should see the image with the ink filter applied.</p>
-<pre><script src="glfx.js"></script>
+This HTML fragment is all you need to use the API. Copy and paste it into an empty index.html document, make sure that directory also contains `glfx.js` and an image named <a href="../media/image.jpg">image.jpg</a>, and open index.html. You should see the image with the ink filter applied.
 
 ```js
 window.onload = function() {
@@ -44,7 +43,7 @@ window.onload = function() {
   // as done above, we could have just transferred the contents of
   // the image directly:
   //
-  //     image.src = canvas.toDataURL('image/png');
+  // image.src = canvas.toDataURL('image/png');
   //
   // This has two disadvantages. First, it is much slower, so it
   // would be a bad idea to do this repeatedly. If you are going
@@ -61,6 +60,7 @@ window.onload = function() {
 
 ```html
 <img id="image" src="image.jpg">
+<script src="glfx.js"></script>
 ```
 
 ### Core API
