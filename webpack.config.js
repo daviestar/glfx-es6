@@ -10,7 +10,7 @@ const fileName = 'glfx-es6';
 
 let plugins = [], outputFile;
 
-if (env === 'build') {
+if (env === 'minified') {
   plugins.push(new UglifyJsPlugin({ minimize: true }));
   outputFile = fileName + '.min.js';
 } else {
@@ -21,7 +21,7 @@ module.exports = {
   entry: __dirname + '/src/index.js',
   devtool: 'source-map',
   output: {
-    path: __dirname + '/demo/dist',
+    path: __dirname + '/dist',
     filename: outputFile,
     publicPath: '/dist/',
     library: libraryName,
@@ -33,11 +33,6 @@ module.exports = {
       {
         test: /\.js/,
         loader: 'babel-loader',
-        exclude: /node_modules/
-      },
-      {
-        test: /\.js/,
-        loader: 'eslint-loader',
         exclude: /node_modules/
       }
     ]

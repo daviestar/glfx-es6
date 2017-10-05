@@ -1,27 +1,36 @@
 {
   "name": "glfx-es6",
   "version": "0.0.1",
-  "main": "demo/dist/glfx-es6.js",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "jsnext:main": "es/index.js",
   "repository": "git@github.com:daviestar/glfx-es6.git",
   "author": "David McArthur <daviestar@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "webpack --env build",
-    "dev": "webpack --progress --colors --watch --env dev",
-    "demo": "static demo"
+    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
+    "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
+    "build:umd": "webpack",
+    "build:umd:min": "webpack --env minified",
+    "build": "npm run build:commonjs && npm run build:es && npm run build:umd && npm run build:umd:min"
   },
+  "files": [
+    "dist",
+    "lib",
+    "es",
+    "src"
+  ],
   "devDependencies": {
-    "babel": "^6.23.0",
-    "babel-core": "^6.26.0",
+    "babel-cli": "^6.3.15",
+    "babel-core": "^6.3.15",
     "babel-eslint": "^8.0.1",
     "babel-loader": "^7.1.2",
     "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-external-helpers": "^6.3.15",
     "babel-preset-env": "^1.6.0",
+    "cross-env": "^5.0.5",
     "eslint": "^4.8.0",
     "eslint-loader": "^1.9.0",
-    "node-static": "^0.7.10",
-    "webpack": "^3.6.0",
-    "webpack-dev-server": "^2.9.1"
-  },
-  "dependencies": {}
+    "webpack": "^3.6.0"
+  }
 }
