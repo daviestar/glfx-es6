@@ -123,56 +123,58 @@ function wrap(func) {
   };
 }
 
-export const canvas = function() {
-  var canvas = document.createElement('canvas');
-  try {
-    store.set({gl: canvas.getContext('experimental-webgl', { premultipliedAlpha: false })});
-  } catch (e) {
-    store.set({gl: null});
-  }
-  var gl = store.get('gl')
-  if (!gl) {
-    throw 'This browser does not support WebGL';
-  }
-  canvas._ = {
-      gl: gl,
-      isInitialized: false,
-      texture: null,
-      spareTexture: null,
-      flippedShader: null
-  };
+export default {
+  canvas() {
+    var canvas = document.createElement('canvas');
+    try {
+      store.set({gl: canvas.getContext('experimental-webgl', { premultipliedAlpha: false })});
+    } catch (e) {
+      store.set({gl: null});
+    }
+    var gl = store.get('gl')
+    if (!gl) {
+      throw 'This browser does not support WebGL';
+    }
+    canvas._ = {
+        gl: gl,
+        isInitialized: false,
+        texture: null,
+        spareTexture: null,
+        flippedShader: null
+    };
 
-  // Core methods
-  canvas.texture = wrap(texture);
-  canvas.draw = wrap(draw);
-  canvas.update = wrap(update);
-  canvas.replace = wrap(replace);
-  canvas.contents = wrap(contents);
-  canvas.getPixelArray = wrap(getPixelArray);
-  
-  // // Filter methods
-  canvas.brightnessContrast = wrap(filters.brightnessContrast);
-  canvas.hexagonalPixelate = wrap(filters.hexagonalPixelate);
-  canvas.hueSaturation = wrap(filters.hueSaturation);
-  canvas.colorHalftone = wrap(filters.colorHalftone);
-  canvas.triangleBlur = wrap(filters.triangleBlur);
-  canvas.unsharpMask = wrap(filters.unsharpMask);
-  canvas.perspective = wrap(filters.perspective);
-  canvas.matrixWarp = wrap(filters.matrixWarp);
-  canvas.bulgePinch = wrap(filters.bulgePinch);
-  canvas.tiltShift = wrap(filters.tiltShift);
-  canvas.dotScreen = wrap(filters.dotScreen);
-  canvas.edgeWork = wrap(filters.edgeWork);
-  canvas.lensBlur = wrap(filters.lensBlur);
-  canvas.zoomBlur = wrap(filters.zoomBlur);
-  canvas.noise = wrap(filters.noise);
-  canvas.denoise = wrap(filters.denoise);
-  canvas.curves = wrap(filters.curves);
-  canvas.swirl = wrap(filters.swirl);
-  canvas.ink = wrap(filters.ink);
-  canvas.vignette = wrap(filters.vignette);
-  canvas.vibrance = wrap(filters.vibrance);
-  canvas.sepia = wrap(filters.sepia);
+    // Core methods
+    canvas.texture = wrap(texture);
+    canvas.draw = wrap(draw);
+    canvas.update = wrap(update);
+    canvas.replace = wrap(replace);
+    canvas.contents = wrap(contents);
+    canvas.getPixelArray = wrap(getPixelArray);
+    
+    // // Filter methods
+    canvas.brightnessContrast = wrap(filters.brightnessContrast);
+    canvas.hexagonalPixelate = wrap(filters.hexagonalPixelate);
+    canvas.hueSaturation = wrap(filters.hueSaturation);
+    canvas.colorHalftone = wrap(filters.colorHalftone);
+    canvas.triangleBlur = wrap(filters.triangleBlur);
+    canvas.unsharpMask = wrap(filters.unsharpMask);
+    canvas.perspective = wrap(filters.perspective);
+    canvas.matrixWarp = wrap(filters.matrixWarp);
+    canvas.bulgePinch = wrap(filters.bulgePinch);
+    canvas.tiltShift = wrap(filters.tiltShift);
+    canvas.dotScreen = wrap(filters.dotScreen);
+    canvas.edgeWork = wrap(filters.edgeWork);
+    canvas.lensBlur = wrap(filters.lensBlur);
+    canvas.zoomBlur = wrap(filters.zoomBlur);
+    canvas.noise = wrap(filters.noise);
+    canvas.denoise = wrap(filters.denoise);
+    canvas.curves = wrap(filters.curves);
+    canvas.swirl = wrap(filters.swirl);
+    canvas.ink = wrap(filters.ink);
+    canvas.vignette = wrap(filters.vignette);
+    canvas.vibrance = wrap(filters.vibrance);
+    canvas.sepia = wrap(filters.sepia);
 
-  return canvas;
-};
+    return canvas;
+  }
+}
