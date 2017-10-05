@@ -1,6 +1,6 @@
 node_modules
 es
-lib
+# lib
 dist
 
 yarn-*.log
