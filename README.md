@@ -1,4 +1,22 @@
+This is a port of [glfx.js by Evan Wallace](http://www.github.com/evanw/glfx.js) to work with modern module importers.  The API is exactly the same.
 
+### Installation
+
+```shell
+npm install glfx-es6 --save
+```
+```html
+<script src="https://unpkg.com/glfx-es6/dist/glfx-es6.min.js"></script>
+```
+
+### Usage
+
+```js
+import fx from 'glfx-es6'
+
+fx.canvas().replace(canvasElement)
+// ...
+```
 
 Original documentation below:
 
