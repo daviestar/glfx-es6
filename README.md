@@ -12,7 +12,7 @@ npm install glfx-es6 --save
 ### Usage
 
 ```js
-import fx from 'glfx-es6'
+import * as fx from 'glfx-es6'
 
 fx.canvas().replace(canvasElement)
 // ...

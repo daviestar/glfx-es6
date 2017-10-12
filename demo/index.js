@@ -124,6 +124,7 @@ function init(image) {
 }
 
 $(window).load(function() {
+  console.log(window.fx)
     // Try to get a WebGL canvas
     if (!window.fx) {
         $('#loading').html('Could not load glfx.js, please check your internet connection');
@@ -346,14 +347,14 @@ $(window).load(function() {
     // Hook up toolbar buttons
     $('#load').click(function() {
         $('#dialog').html('<div class="contents">Pick one of the sample images below or upload an image of your own:<div class="images">' +
-            '<img class="loader" src="samples/mountain.jpg" height="100">' +
-            '<img class="loader" src="samples/smoke.jpg" height="100">' +
-            '<img class="loader" src="samples/face.jpg" height="100">' +
-            '<img class="loader" src="samples/cat.jpg" height="100">' +
-            '<img class="loader" src="samples/greyhound.jpg" height="100">' +
-            '<img class="loader" src="samples/sunset.jpg" height="100">' +
-            '<img class="loader" src="samples/leaf.jpg" height="100">' +
-            '<img class="loader" src="samples/perspective.jpg" height="100">' +
+            '<img class="loader" src="demo/samples/mountain.jpg" height="100">' +
+            '<img class="loader" src="demo/samples/smoke.jpg" height="100">' +
+            '<img class="loader" src="demo/samples/face.jpg" height="100">' +
+            '<img class="loader" src="demo/samples/cat.jpg" height="100">' +
+            '<img class="loader" src="demo/samples/greyhound.jpg" height="100">' +
+            '<img class="loader" src="demo/samples/sunset.jpg" height="100">' +
+            '<img class="loader" src="demo/samples/leaf.jpg" height="100">' +
+            '<img class="loader" src="demo/samples/perspective.jpg" height="100">' +
             '</div><div class="credits">Flickr image credits in order: ' +
             '<a href="http://www.flickr.com/photos/matthigh/2125630879/">matthigh</a>, ' +
             '<a href="http://www.flickr.com/photos/delosj/5816379127/">delosj</a>, ' +
@@ -394,7 +395,7 @@ $(window).load(function() {
     });
 
     // Start loading the first image
-    loadImage('samples/mountain.jpg');
+    loadImage('demo/samples/mountain.jpg');
 });
 
 ////////////////////////////////////////////////////////////////////////////////
