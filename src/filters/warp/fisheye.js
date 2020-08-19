@@ -18,10 +18,11 @@ export default function(centerX, centerY, strength, angle) {
     uniform float angle;
     uniform vec2 center;
   `, `
-    vec2 coord0 = (coord - center)/texSize;
+    float diag = length(texSize);
+    vec2 coord0 = (coord - center)/diag;
     float distance = pow(length(coord0), 2.0);
     coord = coord0 / (1.0 + strength * distance);
-    coord = coord * texSize + center;
+    coord = coord * diag + center;
   `);
 
   simpleShader.call(this, gl.swirl, {

@@ -8,9 +8,6 @@
         var texture = canvas.texture(image);
         document.body.appendChild(canvas);
         canvas.draw(texture).fisheye(canvas.width / 2, canvas.height / 2, 0.9, 3).update();
-        // texture.destroy();
-        // texture = canvas.contents();
-        // canvas.draw(texture).ink(0.25).update();
         document.getElementById('distortionFactor').addEventListener('change',(ev)=>{
             console.log(ev.target.value)
             const val = parseFloat(ev.target.value)
@@ -24,7 +21,7 @@
     <img id="image" src="image.jpg">
     <p>This tests the usage of <code>canvas.contents()</code>. The image below should be the image above after applying the swirl filter followed by the ink filter.</p>
     Distortion Factor:
-    <input type=range min=-2 max=2 step=0.01 value=0.9 id='distortionFactor'></input>
+    <input type=range min=-2 max=2 step=0.01 value=0.9 id='distortionFactor' style='width:90%'></input>
     <span id="distortionFactorLabel">0.9</span>
     
     <br>
