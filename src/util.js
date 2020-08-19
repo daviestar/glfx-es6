@@ -1,4 +1,4 @@
-import SplineInterpolator from './spline'
+import SplineInterpolator from './spline.js'
 
 export function simpleShader(shader, uniforms, textureIn, textureOut) {
   (textureIn || this._.texture).use();

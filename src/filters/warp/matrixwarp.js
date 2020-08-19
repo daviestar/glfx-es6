@@ -1,7 +1,7 @@
-import {warpShader} from '../common'
-import {getInverse} from '../../matrix'
-import {simpleShader} from '../../util'
-import * as store from '../../store'
+import {warpShader} from '../common.js'
+import {getInverse} from '../../matrix.js'
+import {simpleShader} from '../../util.js'
+import * as store from '../../store.js'
 
 /**
  * @filter                Matrix Warp

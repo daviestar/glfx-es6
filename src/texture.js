@@ -1,5 +1,5 @@
-import * as store from './store'
-import Shader from './shader'
+import * as store from './store.js'
+import Shader from './shader.js'
 
 var canvas = null;
 

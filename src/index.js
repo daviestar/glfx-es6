@@ -1,8 +1,8 @@
-import * as store from './store'
-import Texture from './texture'
-import Shader from './shader'
-import * as filters from './filters'
-export {splineInterpolate} from './util'
+import * as store from './store.js'
+import Texture from './texture.js'
+import Shader from './shader.js'
+import * as filters from './filters/index.js'
+export {splineInterpolate} from './util.js'
 
 function wrapTexture(texture) {
   return {

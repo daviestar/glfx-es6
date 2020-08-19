@@ -1,6 +1,6 @@
-import {warpShader} from '../common'
-import {simpleShader} from '../../util'
-import * as store from '../../store'
+import {warpShader} from '../common.js'
+import {simpleShader} from '../../util.js'
+import * as store from '../../store.js'
 
 /**
  * @filter        Swirl
