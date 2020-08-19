@@ -2,22 +2,11 @@
 // Initialization code
 ////////////////////////////////////////////////////////////////////////////////
 
-import fx from '../src/index.js'
-
 var canvas;
 var canvas2d;
 var texture;
 var selectedItem;
 var selectedFilter;
-
-jQuery.fn.extend({
-    live: function (event, callback) {
-       if (this.selector) {
-            jQuery(document).on(event, this.selector, callback);
-        }
-        return this;
-    }
-});
 
 function loadImage(src) {
     var image = new Image();
@@ -134,279 +123,279 @@ function init(image) {
     $('#loading').hide();
 }
 
-// $(window).load(function() {
-// Try to get a WebGL canvas
-if (!fx) {
-    $('#loading').html('Could not load glfx.js, please check your internet connection');
+$(window).load(function() {
+    // Try to get a WebGL canvas
+    if (!window.fx) {
+        $('#loading').html('Could not load glfx.js, please check your internet connection');
+        return;
+    }
+    try {
+        canvas = fx.canvas().replace($('#placeholder')[0]);
+    } catch (e) {
+        $('#loading').html('<div class="sadface">:(</div>Sorry, but this browser doesn\'t support WebGL.<br>Please see ' +
+            '<a href="http://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation">Getting a WebGL implementation</a>');
+        return;
+    }
+    canvas2d = $('#canvas2d')[0];
 
-}
-try {
-    canvas = fx.canvas().replace($('#placeholder')[0]);
-} catch (e) {
-    $('#loading').html('<div class="sadface">:(</div>Sorry, but this browser doesn\'t support WebGL.<br>Please see ' +
-        '<a href="http://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation">Getting a WebGL implementation</a>');
+    // Generate the HTML for the sidebar
+    var nextID = 0;
+    for (var category in filters) {
+        $('<div class="header">' + category + '</div>').appendTo('#sidebar');
+        for (var i = 0; i < filters[category].length; i++) {
+            var filter = filters[category][i];
 
-}
-canvas2d = $('#canvas2d')[0];
-
-// Generate the HTML for the sidebar
-var nextID = 0;
-for (var category in filters) {
-    $('<div class="header">' + category + '</div>').appendTo('#sidebar');
-    for (var i = 0; i < filters[category].length; i++) {
-        var filter = filters[category][i];
-
-        // Generate the HTML for the controls
-        var html = '<div class="item"><div class="title">' + filter.name + '</div><div class="contents"><table>';
-        for (var j = 0; j < filter.sliders.length; j++) {
-            var slider = filter.sliders[j];
-            slider.id = 'control' + nextID++;
-            html += '<tr><td>' + slider.label + ':</td><td><div class="slider" id="' + slider.id + '"></div></td></tr>';
-        }
-        for (var j = 0; j < filter.segmented.length; j++) {
-            var segmented = filter.segmented[j];
-            segmented.id = 'control' + nextID++;
-            html += '<tr><td>' + segmented.label + ':</td><td><div class="segmented">';
-            for (var k = 0; k < segmented.labels.length; k++) {
-                html += '<div class="segment' + (k == segmented.initial ? ' selected' : '') + '" id="' + segmented.id + '-' + k + '">' + segmented.labels[k] + '</div>';
+            // Generate the HTML for the controls
+            var html = '<div class="item"><div class="title">' + filter.name + '</div><div class="contents"><table>';
+            for (var j = 0; j < filter.sliders.length; j++) {
+                var slider = filter.sliders[j];
+                slider.id = 'control' + nextID++;
+                html += '<tr><td>' + slider.label + ':</td><td><div class="slider" id="' + slider.id + '"></div></td></tr>';
             }
-            html += '</div></td></tr>';
-        }
-        html += '</table>';
-        for (var j = 0; j < filter.curves.length; j++) {
-            var curves = filter.curves[j];
-            curves.id = 'control' + nextID++;
-            html += '<canvas class="curves" id="' + curves.id + '"></canvas>';
-        }
-        html += '<div class="button accept">Accept</div><div class="reset">Reset</div></div></div>';
-        var item = $(html).appendTo('#sidebar')[0];
-        item.filter = filter;
-
-        // Add reset button
-        (function(filter) {
-            $(item).find('.reset').click(function() {
-                setSelectedFilter(filter);
-            });
-        })(filter);
-
-        // Make segmented controls
-        for (var j = 0; j < filter.segmented.length; j++) {
-            var segmented = filter.segmented[j];
-            filter[segmented.name] = segmented.initial;
-            for (var k = 0; k < segmented.labels.length; k++) {
-                $('#' + segmented.id + '-' + k).mousedown((function(filter, segmented, index) { return function() {
-                    filter[segmented.name] = index;
-                    for (var k = 0; k < segmented.labels.length; k++) {
-                        $('#' + segmented.id + '-' + k)[index == k ? 'addClass' : 'removeClass']('selected');
-                    }
-                    filter.update();
-                }; })(filter, segmented, k));
-            }
-        }
-
-        // Set all initial nub values
-        for (var j = 0; j < filter.nubs.length; j++) {
-            var nub = filter.nubs[j];
-            var x = nub.x * canvas.width;
-            var y = nub.y * canvas.height;
-            filter[nub.name] = { x: x, y: y };
-        }
-
-        // Set up curves
-        for (var j = 0; j < filter.curves.length; j++) {
-            var curves = filter.curves[j];
-            (function(curves, filter) {
-                var canvas = $('#' + curves.id)[0];
-                var c = canvas.getContext('2d');
-                var w = canvas.width = $(canvas).width();
-                var h = canvas.height = $(canvas).height();
-                var start = 0;
-                var end = 1;
-
-                // Make sure there's always a start and end node
-                function fixCurves() {
-                    if (point[0] == 0) start = point[1];
-                    if (point[0] == 1) end = point[1];
-                    var points = filter[curves.name];
-                    var foundStart = false;
-                    var foundEnd = false;
-                    for (var i = 0; i < points.length; i++) {
-                        var p = points[i];
-                        if (p[0] == 0) {
-                            foundStart = true;
-                            if (point[0] == 0 && p != point) points.splice(i--, 1);
-                        } else if (p[0] == 1) {
-                            foundEnd = true;
-                            if (point[0] == 1 && p != point) points.splice(i--, 1);
-                        }
-                    }
-                    if (!foundStart) points.push([0, start]);
-                    if (!foundEnd) points.push([1, end]);
-                };
-
-                // Render the curves to the canvas
-                curves.draw = function() {
-                    var points = filter[curves.name];
-                    var map = fx.splineInterpolate(points);
-                    c.clearRect(0, 0, w, h);
-                    c.strokeStyle = '#4B4947';
-                    c.beginPath();
-                    for (var i = 0; i < map.length; i++) {
-                        c.lineTo(i / map.length * w, (1 - map[i] / 255) * h);
-                    }
-                    c.stroke();
-                    c.fillStyle = 'white';
-                    for (var i = 0; i < points.length; i++) {
-                        var p = points[i];
-                        c.beginPath();
-                        c.arc(p[0] * w, (1 - p[1]) * h, 3, 0, Math.PI * 2, false);
-                        c.fill();
-                    }
-                };
-
-                // Allow the curves to be manipulated using the mouse
-                var dragging = false;
-                var point;
-                function getMouse(e) {
-                    var offset = $(canvas).offset();
-                    var x = Math.max(0, Math.min(1, (e.pageX - offset.left) / w));
-                    var y = Math.max(0, Math.min(1, 1 - (e.pageY - offset.top) / h));
-                    return [x, y];
+            for (var j = 0; j < filter.segmented.length; j++) {
+                var segmented = filter.segmented[j];
+                segmented.id = 'control' + nextID++;
+                html += '<tr><td>' + segmented.label + ':</td><td><div class="segmented">';
+                for (var k = 0; k < segmented.labels.length; k++) {
+                    html += '<div class="segment' + (k == segmented.initial ? ' selected' : '') + '" id="' + segmented.id + '-' + k + '">' + segmented.labels[k] + '</div>';
                 }
-                $(canvas).mousedown(function(e) {
-                    var points = filter[curves.name];
-                    point = getMouse(e);
-                    for (var i = 0; i < points.length; i++) {
-                        var p = points[i];
-                        var x = (p[0] - point[0]) * w;
-                        var y = (p[1] - point[1]) * h;
-                        if (x * x + y * y < 5 * 5) {
-                            point = p;
-                            break;
-                        }
-                    }
-                    if (i == points.length) points.push(point);
-                    dragging = true;
-                    fixCurves();
-                    curves.draw();
-                    filter.update();
+                html += '</div></td></tr>';
+            }
+            html += '</table>';
+            for (var j = 0; j < filter.curves.length; j++) {
+                var curves = filter.curves[j];
+                curves.id = 'control' + nextID++;
+                html += '<canvas class="curves" id="' + curves.id + '"></canvas>';
+            }
+            html += '<div class="button accept">Accept</div><div class="reset">Reset</div></div></div>';
+            var item = $(html).appendTo('#sidebar')[0];
+            item.filter = filter;
+
+            // Add reset button
+            (function(filter) {
+                $(item).find('.reset').click(function() {
+                    setSelectedFilter(filter);
                 });
-                $(document).mousemove(function(e) {
-                    if (dragging) {
-                        var p = getMouse(e);
-                        point[0] = p[0];
-                        point[1] = p[1];
+            })(filter);
+
+            // Make segmented controls
+            for (var j = 0; j < filter.segmented.length; j++) {
+                var segmented = filter.segmented[j];
+                filter[segmented.name] = segmented.initial;
+                for (var k = 0; k < segmented.labels.length; k++) {
+                    $('#' + segmented.id + '-' + k).mousedown((function(filter, segmented, index) { return function() {
+                        filter[segmented.name] = index;
+                        for (var k = 0; k < segmented.labels.length; k++) {
+                            $('#' + segmented.id + '-' + k)[index == k ? 'addClass' : 'removeClass']('selected');
+                        }
+                        filter.update();
+                    }; })(filter, segmented, k));
+                }
+            }
+
+            // Set all initial nub values
+            for (var j = 0; j < filter.nubs.length; j++) {
+                var nub = filter.nubs[j];
+                var x = nub.x * canvas.width;
+                var y = nub.y * canvas.height;
+                filter[nub.name] = { x: x, y: y };
+            }
+
+            // Set up curves
+            for (var j = 0; j < filter.curves.length; j++) {
+                var curves = filter.curves[j];
+                (function(curves, filter) {
+                    var canvas = $('#' + curves.id)[0];
+                    var c = canvas.getContext('2d');
+                    var w = canvas.width = $(canvas).width();
+                    var h = canvas.height = $(canvas).height();
+                    var start = 0;
+                    var end = 1;
+
+                    // Make sure there's always a start and end node
+                    function fixCurves() {
+                        if (point[0] == 0) start = point[1];
+                        if (point[0] == 1) end = point[1];
+                        var points = filter[curves.name];
+                        var foundStart = false;
+                        var foundEnd = false;
+                        for (var i = 0; i < points.length; i++) {
+                            var p = points[i];
+                            if (p[0] == 0) {
+                                foundStart = true;
+                                if (point[0] == 0 && p != point) points.splice(i--, 1);
+                            } else if (p[0] == 1) {
+                                foundEnd = true;
+                                if (point[0] == 1 && p != point) points.splice(i--, 1);
+                            }
+                        }
+                        if (!foundStart) points.push([0, start]);
+                        if (!foundEnd) points.push([1, end]);
+                    };
+
+                    // Render the curves to the canvas
+                    curves.draw = function() {
+                        var points = filter[curves.name];
+                        var map = fx.splineInterpolate(points);
+                        c.clearRect(0, 0, w, h);
+                        c.strokeStyle = '#4B4947';
+                        c.beginPath();
+                        for (var i = 0; i < map.length; i++) {
+                            c.lineTo(i / map.length * w, (1 - map[i] / 255) * h);
+                        }
+                        c.stroke();
+                        c.fillStyle = 'white';
+                        for (var i = 0; i < points.length; i++) {
+                            var p = points[i];
+                            c.beginPath();
+                            c.arc(p[0] * w, (1 - p[1]) * h, 3, 0, Math.PI * 2, false);
+                            c.fill();
+                        }
+                    };
+
+                    // Allow the curves to be manipulated using the mouse
+                    var dragging = false;
+                    var point;
+                    function getMouse(e) {
+                        var offset = $(canvas).offset();
+                        var x = Math.max(0, Math.min(1, (e.pageX - offset.left) / w));
+                        var y = Math.max(0, Math.min(1, 1 - (e.pageY - offset.top) / h));
+                        return [x, y];
+                    }
+                    $(canvas).mousedown(function(e) {
+                        var points = filter[curves.name];
+                        point = getMouse(e);
+                        for (var i = 0; i < points.length; i++) {
+                            var p = points[i];
+                            var x = (p[0] - point[0]) * w;
+                            var y = (p[1] - point[1]) * h;
+                            if (x * x + y * y < 5 * 5) {
+                                point = p;
+                                break;
+                            }
+                        }
+                        if (i == points.length) points.push(point);
+                        dragging = true;
                         fixCurves();
                         curves.draw();
                         filter.update();
-                    }
-                });
-                $(document).mouseup(function() {
-                    dragging = false;
-                });
+                    });
+                    $(document).mousemove(function(e) {
+                        if (dragging) {
+                            var p = getMouse(e);
+                            point[0] = p[0];
+                            point[1] = p[1];
+                            fixCurves();
+                            curves.draw();
+                            filter.update();
+                        }
+                    });
+                    $(document).mouseup(function() {
+                        dragging = false;
+                    });
 
-                // Set the initial curves
-                filter[curves.name] = [[0, 0], [1, 1]];
-                curves.draw();
-            })(curves, filter);
-        }
+                    // Set the initial curves
+                    filter[curves.name] = [[0, 0], [1, 1]];
+                    curves.draw();
+                })(curves, filter);
+            }
 
-        // Make jQuery UI sliders
-        for (var j = 0; j < filter.sliders.length; j++) {
-            var slider = filter.sliders[j];
-            filter[slider.name] = slider.value;
-            var onchange = (function(filter, slider) { return function(event, ui) {
-                filter[slider.name] = ui.value;
-                if (selectedFilter == filter) filter.update();
-            }; })(filter, slider);
-            $('#' + slider.id).slider({
-                slide: onchange,
-                change: onchange,
-                min: slider.min,
-                max: slider.max,
-                value: slider.value,
-                step: slider.step
-            });
+            // Make jQuery UI sliders
+            for (var j = 0; j < filter.sliders.length; j++) {
+                var slider = filter.sliders[j];
+                filter[slider.name] = slider.value;
+                var onchange = (function(filter, slider) { return function(event, ui) {
+                    filter[slider.name] = ui.value;
+                    if (selectedFilter == filter) filter.update();
+                }; })(filter, slider);
+                $('#' + slider.id).slider({
+                    slide: onchange,
+                    change: onchange,
+                    min: slider.min,
+                    max: slider.max,
+                    value: slider.value,
+                    step: slider.step
+                });
+            }
         }
     }
-}
 
-// Change the filter when a sidebar item is clicked
-$('#sidebar .item .title').live('mousedown', function(e) {
-    var item = e.target.parentNode;
-    if (selectedItem) contractItem(selectedItem);
-    if (selectedItem != item) {
-        expandItem(item);
-        selectedItem = item;
-        setSelectedFilter(item.filter);
-    } else {
+    // Change the filter when a sidebar item is clicked
+    $('#sidebar .item .title').live('mousedown', function(e) {
+        var item = e.target.parentNode;
+        if (selectedItem) contractItem(selectedItem);
+        if (selectedItem != item) {
+            expandItem(item);
+            selectedItem = item;
+            setSelectedFilter(item.filter);
+        } else {
+            setSelectedFilter(null);
+            selectedItem = null;
+        }
+    });
+
+    // Update texture with canvas contents when a filter is accepted
+    $('.accept').live('click', function() {
+        contractItem(selectedItem);
+        texture.destroy();
+        texture = canvas.contents();
         setSelectedFilter(null);
         selectedItem = null;
-    }
-});
+    });
 
-// Update texture with canvas contents when a filter is accepted
-$('.accept').live('click', function() {
-    contractItem(selectedItem);
-    texture.destroy();
-    texture = canvas.contents();
-    setSelectedFilter(null);
-    selectedItem = null;
-});
+    // Hook up toolbar buttons
+    $('#load').click(function() {
+        $('#dialog').html('<div class="contents">Pick one of the sample images below or upload an image of your own:<div class="images">' +
+            '<img class="loader" src="samples/mountain.jpg" height="100">' +
+            '<img class="loader" src="samples/smoke.jpg" height="100">' +
+            '<img class="loader" src="samples/face.jpg" height="100">' +
+            '<img class="loader" src="samples/cat.jpg" height="100">' +
+            '<img class="loader" src="samples/greyhound.jpg" height="100">' +
+            '<img class="loader" src="samples/sunset.jpg" height="100">' +
+            '<img class="loader" src="samples/leaf.jpg" height="100">' +
+            '<img class="loader" src="samples/perspective.jpg" height="100">' +
+            '</div><div class="credits">Flickr image credits in order: ' +
+            '<a href="http://www.flickr.com/photos/matthigh/2125630879/">matthigh</a>, ' +
+            '<a href="http://www.flickr.com/photos/delosj/5816379127/">delosj</a>, ' +
+            '<a href="http://www.flickr.com/photos/stuckincustoms/219537913/">stuckincustoms</a>, ' +
+            '<a href="http://www.flickr.com/photos/pasma/580401331/">pasma</a>, ' +
+            '<a href="http://www.flickr.com/photos/delosj/5546225759/">delosj</a>, ' +
+            '<a href="http://www.flickr.com/photos/seriousbri/3736154699/">seriousbri</a>, ' +
+            '<a href="http://www.flickr.com/photos/melisande-origami/157818928/">melisande-origami</a>, and ' +
+            '<a href="http://www.flickr.com/photos/stuckincustoms/4669163231/">stuckincustoms</a>' +
+            '</div></div>' +
+            '<div class="button"><input type="file" class="upload">Upload File...</div>' +
+            '<div class="button closedialog">Cancel</div>');
+        showDialog();
+    });
+    $('#dialog input.upload').live('change', function(e) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            loadImage(e.target.result);
+        };
+        reader.readAsDataURL(e.target.files[0]);
+    });
+    $('#dialog img.loader').live('mousedown', function(e) {
+        loadImage(e.target.src);
+    });
+    $('#save').click(function() {
+        window.open(canvas.toDataURL('image/png'));
+    });
+    $('#about').click(function() {
+        $('#dialog').html('<div class="contents">Copyright 2011 <a href="http://madebyevan.com">Evan Wallace</a>' +
+        '<br><br>This application is powered by <a href="http://evanw.github.com/glfx.js/">glfx.js</a>, an ' +
+        'open-source image effect library that uses WebGL.&nbsp; The source code for this application is ' +
+        'also <a href="http://github.com/evanw/webgl-filter/">available on GitHub</a>.</div><div class="button ' +
+        'closedialog">Close</div>');
+        showDialog();
+    });
+    $('.closedialog').live('click', function() {
+        hideDialog();
+    });
 
-// Hook up toolbar buttons
-$('#load').click(function() {
-    $('#dialog').html('<div class="contents">Pick one of the sample images below or upload an image of your own:<div class="images">' +
-        '<img class="loader" src="samples/mountain.jpg" height="100">' +
-        '<img class="loader" src="samples/smoke.jpg" height="100">' +
-        '<img class="loader" src="samples/face.jpg" height="100">' +
-        '<img class="loader" src="samples/cat.jpg" height="100">' +
-        '<img class="loader" src="samples/greyhound.jpg" height="100">' +
-        '<img class="loader" src="samples/sunset.jpg" height="100">' +
-        '<img class="loader" src="samples/leaf.jpg" height="100">' +
-        '<img class="loader" src="samples/perspective.jpg" height="100">' +
-        '</div><div class="credits">Flickr image credits in order: ' +
-        '<a href="http://www.flickr.com/photos/matthigh/2125630879/">matthigh</a>, ' +
-        '<a href="http://www.flickr.com/photos/delosj/5816379127/">delosj</a>, ' +
-        '<a href="http://www.flickr.com/photos/stuckincustoms/219537913/">stuckincustoms</a>, ' +
-        '<a href="http://www.flickr.com/photos/pasma/580401331/">pasma</a>, ' +
-        '<a href="http://www.flickr.com/photos/delosj/5546225759/">delosj</a>, ' +
-        '<a href="http://www.flickr.com/photos/seriousbri/3736154699/">seriousbri</a>, ' +
-        '<a href="http://www.flickr.com/photos/melisande-origami/157818928/">melisande-origami</a>, and ' +
-        '<a href="http://www.flickr.com/photos/stuckincustoms/4669163231/">stuckincustoms</a>' +
-        '</div></div>' +
-        '<div class="button"><input type="file" class="upload">Upload File...</div>' +
-        '<div class="button closedialog">Cancel</div>');
-    showDialog();
+    // Start loading the first image
+    loadImage('samples/mountain.jpg');
 });
-$('#dialog input.upload').live('change', function(e) {
-    var reader = new FileReader();
-    reader.onload = function(e) {
-        loadImage(e.target.result);
-    };
-    reader.readAsDataURL(e.target.files[0]);
-});
-$('#dialog img.loader').live('mousedown', function(e) {
-    loadImage(e.target.src);
-});
-$('#save').click(function() {
-    window.open(canvas.toDataURL('image/png'));
-});
-$('#about').click(function() {
-    $('#dialog').html('<div class="contents">Copyright 2011 <a href="http://madebyevan.com">Evan Wallace</a>' +
-    '<br><br>This application is powered by <a href="http://evanw.github.com/glfx.js/">glfx.js</a>, an ' +
-    'open-source image effect library that uses WebGL.&nbsp; The source code for this application is ' +
-    'also <a href="http://github.com/evanw/webgl-filter/">available on GitHub</a>.</div><div class="button ' +
-    'closedialog">Close</div>');
-    showDialog();
-});
-$('.closedialog').live('click', function() {
-    hideDialog();
-});
-
-// Start loading the first image
-loadImage('samples/mountain.jpg');
-// });
 
 ////////////////////////////////////////////////////////////////////////////////
 // Filter object
