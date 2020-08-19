@@ -174,6 +174,7 @@ export default {
     canvas.vignette = wrap(filters.vignette);
     canvas.vibrance = wrap(filters.vibrance);
     canvas.sepia = wrap(filters.sepia);
+    canvas.fisheye = wrap(filters.fisheye);
 
     return canvas;
   }
