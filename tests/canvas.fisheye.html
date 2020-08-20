@@ -1,0 +1,28 @@
+<script type=module>
+
+    import fx from '../src/index.js'
+    
+    window.onload = function() {
+        var canvas = fx.canvas();
+        var image = document.getElementById('image');
+        var texture = canvas.texture(image);
+        document.body.appendChild(canvas);
+        canvas.draw(texture).fisheye(canvas.width / 2, canvas.height / 2, 0.9, 3).update();
+        document.getElementById('distortionFactor').addEventListener('change',(ev)=>{
+            console.log(ev.target.value)
+            const val = parseFloat(ev.target.value)
+            canvas.draw(texture).fisheye(canvas.width / 2, canvas.height / 2, val, 3).update()
+            document.getElementById('distortionFactorLabel').innerHTML = `${val}`
+        })
+    };
+    
+    
+    </script>
+    <img id="image" src="image.jpg">
+    <p>This tests the usage of <code>canvas.contents()</code>. The image below should be the image above after applying the swirl filter followed by the ink filter.</p>
+    Distortion Factor:
+    <input type=range min=-2 max=2 step=0.01 value=0.9 id='distortionFactor' style='width:90%'></input>
+    <span id="distortionFactorLabel">0.9</span>
+    
+    <br>
+    

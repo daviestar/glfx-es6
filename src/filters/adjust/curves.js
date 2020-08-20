@@ -1,6 +1,6 @@
-import Shader from '../../shader'
-import {simpleShader, clamp, splineInterpolate} from '../../util'
-import * as store from '../../store'
+import Shader from '../../shader.js'
+import {simpleShader, clamp, splineInterpolate} from '../../util.js'
+import * as store from '../../store.js'
 
 /**
  * @filter      Curves

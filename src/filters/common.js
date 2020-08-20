@@ -1,4 +1,4 @@
-import Shader from '../shader'
+import Shader from '../shader.js'
 
 export function warpShader(uniforms, warp) {
   return new Shader(null, uniforms + '\

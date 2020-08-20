@@ -1,4 +1,4 @@
-import {getSquareToQuad, multiply, getInverse} from '../../matrix'
+import {getSquareToQuad, multiply, getInverse} from '../../matrix.js'
 
 /**
  * @filter       Perspective

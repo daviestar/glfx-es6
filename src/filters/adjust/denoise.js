@@ -1,6 +1,6 @@
-import Shader from '../../shader'
-import {simpleShader} from '../../util'
-import * as store from '../../store'
+import Shader from '../../shader.js'
+import {simpleShader} from '../../util.js'
+import * as store from '../../store.js'
 
 /**
  * @filter         Denoise

@@ -1,7 +1,7 @@
-import Shader from '../../shader'
-import {simpleShader, clamp} from '../../util'
-import {randomShaderFunc} from '../common'
-import * as store from '../../store'
+import Shader from '../../shader.js'
+import {simpleShader, clamp} from '../../util.js'
+import {randomShaderFunc} from '../common.js'
+import * as store from '../../store.js'
 
 /**
  * @filter           Lens Blur
